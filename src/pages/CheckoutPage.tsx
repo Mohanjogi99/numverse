@@ -1,0 +1,191 @@
+import React, { useState } from 'react';
+import { useParams, Link, useNavigate, useSearchParams } from 'react-router-dom';
+import {
+  CheckCircle2,
+  ArrowLeft,
+  ShieldCheck,
+  CreditCard,
+  Loader2,
+} from 'lucide-react';
+import { Card } from '../components/ui/Card';
+import { Button } from '../components/ui/Button';
+import { Input } from '../components/ui/Input';
+import { Badge } from '../components/ui/Badge';
+import { DisclaimerBanner } from '../components/common/DisclaimerBanner';
+import { getProductById, PRODUCTS } from '../config/products';
+import { paymentClientService } from '../services/paymentClientService';
+import { ROUTES } from '../config/routes';
+import { useToast } from '../context/ToastContext';
+import { useLanguage } from '../context/LanguageContext';
+
+export const CheckoutPage: React.FC = () => {
+  const { productId } = useParams<{ productId: string }>();
+  const [searchParams] = useSearchParams();
+  const reportId = searchParams.get('reportId') || undefined;
+  const navigate = useNavigate();
+  const { showToast } = useToast();
+  const { t } = useLanguage();
+
+  const product = getProductById(productId || 'combo') || PRODUCTS.combo;
+
+  const [customerName, setCustomerName] = useState('Explorer');
+  const [customerEmail, setCustomerEmail] = useState('explorer@example.com');
+  const [isProcessing, setIsProcessing] = useState(false);
+
+  const handleProceedToPayment = async () => {
+    setIsProcessing(true);
+
+    try {
+      await paymentClientService.initiatePayment({
+        productId: product.id,
+        reportId,
+        userDetails: {
+          name: customerName,
+          email: customerEmail,
+        },
+        onSuccess: (result) => {
+          setIsProcessing(false);
+          showToast('Payment verified successfully. Premium access unlocked!', 'success');
+          navigate(
+            `${ROUTES.PAYMENT_SUCCESS}?orderId=${result.orderId}&productId=${product.id}${
+              reportId ? `&reportId=${reportId}` : ''
+            }`
+          );
+        },
+        onFailure: (errorMsg) => {
+          setIsProcessing(false);
+          showToast(errorMsg, 'error');
+          navigate(
+            `${ROUTES.PAYMENT_FAILED}?productId=${product.id}&error=${encodeURIComponent(errorMsg)}`
+          );
+        },
+        onDismiss: () => {
+          setIsProcessing(false);
+          showToast('Checkout was closed.', 'info');
+        },
+      });
+    } catch (err) {
+      setIsProcessing(false);
+      console.error('[CheckoutPage] Checkout initiation error:', err);
+      showToast('Could not open payment gateway. Please try again.', 'error');
+    }
+  };
+
+  return (
+    <div className="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-16 space-y-8 animate-fade-in">
+      <Link
+        to={ROUTES.HOME}
+        className="inline-flex items-center gap-1.5 text-xs font-semibold text-slate-500 dark:text-slate-400 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors"
+      >
+        <ArrowLeft className="w-4 h-4" />
+        <span>Return to Application</span>
+      </Link>
+
+      <Card className="p-6 sm:p-10 space-y-6">
+        {/* Header */}
+        <div className="flex flex-wrap items-center justify-between gap-2 pb-4 border-b border-slate-100 dark:border-slate-800">
+          <div>
+            <div className="flex items-center gap-2">
+              <span className="text-xs font-bold uppercase tracking-wider text-indigo-700 dark:text-indigo-300 bg-indigo-50 dark:bg-indigo-950/60 px-2.5 py-1 rounded-md border border-indigo-200/50 dark:border-indigo-800/50">
+                {product.name}
+              </span>
+              {product.badge && <Badge variant="gold" size="sm">{product.badge}</Badge>}
+            </div>
+            <h1 className="text-xl sm:text-2xl font-display font-bold text-slate-900 dark:text-slate-100 mt-2">
+              {t.checkout.orderSummary}
+            </h1>
+          </div>
+          <div className="text-right">
+            <span className="text-2xl sm:text-3xl font-display font-black text-slate-900 dark:text-white">
+              {product.formattedPrice}
+            </span>
+            <span className="block text-[11px] text-slate-400 dark:text-slate-500 font-medium">{t.checkout.oneTime}</span>
+          </div>
+        </div>
+
+        {/* Customer Contact Prefill */}
+        <div className="p-4 rounded-2xl bg-slate-50 dark:bg-slate-900/60 border border-slate-100 dark:border-slate-800 space-y-3">
+          <span className="text-xs font-bold text-slate-800 dark:text-slate-200 uppercase tracking-wider block">
+            {t.checkout.billingDetails}
+          </span>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <Input
+              label={t.checkout.yourName}
+              value={customerName}
+              onChange={(e) => setCustomerName(e.target.value)}
+              placeholder="e.g. John Doe"
+            />
+            <Input
+              label={t.checkout.emailReceipt}
+              type="email"
+              value={customerEmail}
+              onChange={(e) => setCustomerEmail(e.target.value)}
+              placeholder="e.g. john@example.com"
+            />
+          </div>
+        </div>
+
+        {/* Feature inclusions */}
+        <div className="space-y-3 text-xs sm:text-sm text-slate-600 dark:text-slate-300">
+          <p className="font-semibold text-slate-800 dark:text-slate-200">{t.checkout.included}</p>
+          <ul className="space-y-2">
+            {product.features.map((feat, i) => (
+              <li key={i} className="flex items-start gap-2.5">
+                <CheckCircle2 className="w-4 h-4 text-emerald-500 shrink-0 mt-0.5" />
+                <span>{feat}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
+
+        {/* Order Price Breakdown */}
+        <div className="p-4 rounded-2xl bg-slate-50 dark:bg-slate-900/60 border border-slate-100 dark:border-slate-800 space-y-2 text-xs">
+          <div className="flex justify-between text-slate-600 dark:text-slate-400">
+            <span>Item: {product.name}</span>
+            <span>{product.formattedPrice}</span>
+          </div>
+          <div className="flex justify-between text-slate-600 dark:text-slate-400">
+            <span>{t.checkout.gstIncluded}</span>
+            <span className="text-emerald-600 dark:text-emerald-400 font-semibold">{t.checkout.includedBadge}</span>
+          </div>
+          <div className="pt-2 border-t border-slate-200 dark:border-slate-800 flex justify-between font-bold text-slate-900 dark:text-white text-sm">
+            <span>{t.checkout.totalPayable}</span>
+            <span>{product.formattedPrice}</span>
+          </div>
+        </div>
+
+        {/* Trust & Security Badge */}
+        <div className="p-3.5 rounded-2xl bg-indigo-50/60 dark:bg-indigo-950/40 border border-indigo-100 dark:border-indigo-900/50 text-xs text-indigo-900 dark:text-indigo-200 flex items-center justify-between gap-3">
+          <div className="flex items-center gap-2 font-medium">
+            <ShieldCheck className="w-4 h-4 text-indigo-600 dark:text-indigo-400 shrink-0" />
+            <span>{t.checkout.sslBadge}</span>
+          </div>
+          <Badge variant="primary" size="sm">
+            Test Mode
+          </Badge>
+        </div>
+
+        {/* Payment CTA Button */}
+        <Button
+          size="lg"
+          variant="gold"
+          className="w-full shadow-lg shadow-amber-500/20"
+          disabled={isProcessing}
+          onClick={handleProceedToPayment}
+          leftIcon={
+            isProcessing ? (
+              <Loader2 className="w-5 h-5 animate-spin" />
+            ) : (
+              <CreditCard className="w-5 h-5" />
+            )
+          }
+        >
+          {isProcessing ? t.checkout.processing : `${t.checkout.pay} ${product.formattedPrice} & ${t.checkout.unlock}`}
+        </Button>
+      </Card>
+
+      <DisclaimerBanner variant="card" />
+    </div>
+  );
+};
+

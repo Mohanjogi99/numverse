@@ -1,0 +1,41 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    
+    // Helper functions
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+    
+    function isOwner(userId) {
+      return isAuthenticated() && request.auth.uid == userId;
+    }
+    
+    function isAdmin() {
+      return isAuthenticated() && request.auth.token.admin == true;
+    }
+
+    // 1. Payments Collection: Strict server-only writes
+    match /payments/{orderId} {
+      allow read: if isOwner(resource.data.userId) || isAdmin();
+      allow write: if false; // Only trusted backend Firebase functions can modify payment state
+    }
+
+    // 2. Entitlements Collection: Strict server-only writes
+    match /entitlements/{entitlementId} {
+      allow read: if isOwner(resource.data.userId) || isAdmin();
+      allow write: if false; // Only verified backend payment verification can grant entitlements
+    }
+
+    // 3. Fusion Reports: Read-only for public guest previews or authorized owners
+    match /fusionReports/{reportId} {
+      allow read: if resource.data.userId == null || isOwner(resource.data.userId) || isAdmin();
+      allow write: if false; // Managed exclusively via serverless report generator
+    }
+
+    // 4. Default deny all other collections
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}
