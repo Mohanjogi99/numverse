@@ -1,5 +1,4 @@
 import {
-  CreateOrderResponse,
   VerifyPaymentResponse,
   RazorpayCheckoutOptions,
 } from '../types/payment';
@@ -133,28 +132,20 @@ export class PaymentClientService {
       return;
     }
 
-    const clientOrderId = `order_${Date.now()}_${Math.random().toString(36).slice(2, 7)}`;
-    const testKeyId = import.meta.env.VITE_RAZORPAY_KEY_ID || 'rzp_test_placeholder_key';
-
-    const orderRes: CreateOrderResponse = {
-      success: true,
-      orderId: clientOrderId,
-      amount: product.amountInPaise,
-      currency: 'INR',
-      keyId: testKeyId,
-    };
+    const liveKeyId = import.meta.env.VITE_RAZORPAY_KEY_ID || 'rzp_live_Ssn4D2zqOraGeu';
 
     // Load SDK
     const isLoaded = await this.loadRazorpayScript();
     if (!isLoaded || !window.Razorpay) {
       // Sandbox fallback mode for local preview / offline dev
       const mockPayId = `pay_mock_${Date.now()}`;
+      const mockOrderId = `order_mock_${Date.now()}`;
 
-      this.recordLocalEntitlement(userId, product.id, params.reportId, orderRes.orderId);
+      this.recordLocalEntitlement(userId, product.id, params.reportId, mockOrderId);
 
       analytics.logEvent('page_view', {
         action: 'payment_success_sandbox',
-        orderId: orderRes.orderId,
+        orderId: mockOrderId,
         product: params.productId,
       });
 
@@ -162,43 +153,52 @@ export class PaymentClientService {
         success: true,
         verified: true,
         paymentId: mockPayId,
-        orderId: orderRes.orderId || clientOrderId,
+        orderId: mockOrderId,
       });
       return;
     }
 
     // Configure Checkout Modal Options
+    // NOTE: In Razorpay Standard Checkout, do NOT pass a client-generated order_id.
+    // Razorpay will process direct checkout using amount, currency, and key.
     const options: RazorpayCheckoutOptions = {
-      key: orderRes.keyId || 'rzp_test_placeholder_key',
-      amount: orderRes.amount || product.amountInPaise,
-      currency: orderRes.currency || 'INR',
-      name: 'Number Story',
+      key: liveKeyId,
+      amount: product.amountInPaise,
+      currency: 'INR',
+      name: 'Numverse',
       description: `Unlock ${product.name} Premium Report`,
-      order_id: orderRes.orderId || clientOrderId,
-      prefill: params.userDetails,
-      theme: {
-        color: '#4f46e5',
+      prefill: {
+        name: params.userDetails?.name || 'Explorer',
+        email: params.userDetails?.email || 'explorer@numverse.art',
+        contact: params.userDetails?.contact || '',
       },
-      handler: async (response) => {
+      theme: {
+        color: '#7c3aed',
+      },
+      handler: (response) => {
         try {
+          const paymentId = response.razorpay_payment_id;
+          const orderId = response.razorpay_order_id || `pay_${paymentId}`;
+
           this.recordLocalEntitlement(
             userId,
             product.id,
             params.reportId,
-            response.razorpay_order_id
+            orderId
           );
 
           analytics.logEvent('page_view', {
             action: 'payment_success',
-            orderId: response.razorpay_order_id,
+            orderId,
+            paymentId,
             product: params.productId,
           });
 
           params.onSuccess({
             success: true,
             verified: true,
-            paymentId: response.razorpay_payment_id,
-            orderId: response.razorpay_order_id,
+            paymentId,
+            orderId,
           });
         } catch (verifyErr) {
           params.onFailure((verifyErr as Error).message || 'Payment verification error.');
