@@ -1,7 +1,6 @@
 import React from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import { ArrowLeft, Compass, CheckCircle2 } from 'lucide-react';
-import { NUMBER_PROFILES } from '../data/numberProfiles';
 import { NUMBER_INFLUENCE_MATRIX } from '../data/influenceMatrix';
 import { SingleDigit, DimensionKey } from '../types/number';
 import { Card } from '../components/ui/Card';
@@ -10,16 +9,19 @@ import { Badge } from '../components/ui/Badge';
 import { DimensionBar } from '../components/common/DimensionBar';
 import { DisclaimerBanner } from '../components/common/DisclaimerBanner';
 import { ROUTES } from '../config/routes';
+import { useLanguage } from '../context/LanguageContext';
+import { getLocalizedNumberProfile } from '../i18n/profileHelpers';
 
 export const NumberDetailPage: React.FC = () => {
   const { number } = useParams<{ number: string }>();
   const navigate = useNavigate();
+  const { language, isHindi } = useLanguage();
 
   const parsed = parseInt(number || '0', 10);
   const isValid = !isNaN(parsed) && parsed >= 0 && parsed <= 9;
   const validDigit = (isValid ? parsed : 0) as SingleDigit;
 
-  const profile = NUMBER_PROFILES[validDigit];
+  const profile = getLocalizedNumberProfile(validDigit, language);
   const matrixRow = NUMBER_INFLUENCE_MATRIX[validDigit];
 
   const dimensions: DimensionKey[] = [
@@ -70,20 +72,22 @@ export const NumberDetailPage: React.FC = () => {
             </div>
             <div className="space-y-1">
               <Badge variant="gold" size="sm">
-                Theme: {profile.theme}
+                {isHindi ? 'विषय:' : 'Theme:'} {profile.theme}
               </Badge>
               <h1 className="text-2xl sm:text-3xl lg:text-4xl font-display font-extrabold text-white">
                 {profile.tagline}
               </h1>
               <p className="text-xs sm:text-sm text-slate-300 max-w-xl">
-                Archetypal meaning, behavioral strengths, and dimension baseline.
+                {isHindi
+                  ? 'मूल अर्थ, व्यवहारिक शक्तियां और 6 मनोवैज्ञानिक आयामों का आधारभूत प्रभाव।'
+                  : 'Archetypal meaning, behavioral strengths, and dimension baseline.'}
               </p>
             </div>
           </div>
 
           <Link to={ROUTES.NUMBER_ANALYSIS}>
             <Button variant="primary" size="md" rightIcon={<Compass className="w-4 h-4" />}>
-              Analyze My Number
+              {isHindi ? 'मेरे नंबर का विश्लेषण करें' : 'Analyze My Number'}
             </Button>
           </Link>
         </div>
@@ -94,7 +98,7 @@ export const NumberDetailPage: React.FC = () => {
         <Card className="p-6 sm:p-8 space-y-6 lg:col-span-2 border-slate-200">
           <div className="space-y-2">
             <h2 className="text-xs font-bold uppercase tracking-widest text-indigo-600">
-              Core Meaning & Essence
+              {isHindi ? 'मूल अर्थ एवं सार' : 'Core Meaning & Essence'}
             </h2>
             <p className="text-sm sm:text-base text-slate-700 leading-relaxed">
               {profile.description}
@@ -105,7 +109,7 @@ export const NumberDetailPage: React.FC = () => {
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 pt-4 border-t border-slate-100">
             <div className="space-y-2.5">
               <h3 className="text-xs font-bold uppercase tracking-wider text-emerald-700">
-                Key Strengths
+                {isHindi ? 'मुख्य शक्तियाँ' : 'Key Strengths'}
               </h3>
               <ul className="space-y-1.5 text-xs sm:text-sm text-slate-700">
                 {profile.strengths.map((str, i) => (
@@ -119,7 +123,7 @@ export const NumberDetailPage: React.FC = () => {
 
             <div className="space-y-2.5">
               <h3 className="text-xs font-bold uppercase tracking-wider text-amber-700">
-                Potential Challenges
+                {isHindi ? 'सावधानी एवं विकास बिंदु' : 'Potential Challenges'}
               </h3>
               <ul className="space-y-1.5 text-xs sm:text-sm text-slate-700">
                 {profile.challenges.map((ch, i) => (
@@ -139,10 +143,12 @@ export const NumberDetailPage: React.FC = () => {
         <Card className="p-6 space-y-4 border-slate-200">
           <div>
             <h2 className="text-base font-display font-bold text-slate-900 mb-1">
-              Influence Baseline
+              {isHindi ? 'प्रभाव आधारभूत रेखा' : 'Influence Baseline'}
             </h2>
             <p className="text-xs text-slate-500 mb-4">
-              Standard Engine v1.0 matrix weight for digit {profile.number}.
+              {isHindi
+                ? `अंक ${profile.number} के लिए Numverse Engine v1.0 मैट्रिक्स वेट।`
+                : `Standard Engine v1.0 matrix weight for digit ${profile.number}.`}
             </p>
 
             <div className="space-y-3">
@@ -157,13 +163,13 @@ export const NumberDetailPage: React.FC = () => {
       {/* 6 Pillars Breakdown */}
       <div className="space-y-4">
         <h2 className="text-lg font-display font-bold text-slate-900">
-          Archetypal Facets of #{profile.number}
+          {isHindi ? `अंक #${profile.number} के विभिन्न पहलू` : `Archetypal Facets of #${profile.number}`}
         </h2>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
           <Card className="p-5 space-y-2 border-slate-200">
             <h3 className="text-xs font-bold uppercase tracking-wider text-indigo-700">
-              Relationships & Bonds
+              {isHindi ? 'संबंध एवं रिश्ते' : 'Relationships & Bonds'}
             </h3>
             <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">
               {profile.relationship}
@@ -172,7 +178,7 @@ export const NumberDetailPage: React.FC = () => {
 
           <Card className="p-5 space-y-2 border-slate-200">
             <h3 className="text-xs font-bold uppercase tracking-wider text-indigo-700">
-              Career & Ambition
+              {isHindi ? 'करियर एवं महत्वाकांक्षा' : 'Career & Ambition'}
             </h3>
             <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">
               {profile.career}
@@ -181,7 +187,7 @@ export const NumberDetailPage: React.FC = () => {
 
           <Card className="p-5 space-y-2 border-slate-200">
             <h3 className="text-xs font-bold uppercase tracking-wider text-indigo-700">
-              Money & Resources
+              {isHindi ? 'धन एवं संसाधन' : 'Money & Resources'}
             </h3>
             <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">
               {profile.money}
@@ -190,7 +196,7 @@ export const NumberDetailPage: React.FC = () => {
 
           <Card className="p-5 space-y-2 border-slate-200">
             <h3 className="text-xs font-bold uppercase tracking-wider text-indigo-700">
-              Communication Style
+              {isHindi ? 'संवाद शैली' : 'Communication Style'}
             </h3>
             <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">
               {profile.communication}
@@ -199,7 +205,7 @@ export const NumberDetailPage: React.FC = () => {
 
           <Card className="p-5 space-y-2 border-slate-200">
             <h3 className="text-xs font-bold uppercase tracking-wider text-indigo-700">
-              Learning & Mastery
+              {isHindi ? 'सीखने एवं निपुणता की शैली' : 'Learning & Mastery'}
             </h3>
             <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">
               {profile.learning}
@@ -208,7 +214,7 @@ export const NumberDetailPage: React.FC = () => {
 
           <Card className="p-5 space-y-2 border-slate-200 bg-indigo-50/40 border-indigo-100">
             <h3 className="text-xs font-bold uppercase tracking-wider text-indigo-800">
-              Growth Evolution
+              {isHindi ? 'व्यक्तिगत विकास' : 'Growth Evolution'}
             </h3>
             <p className="text-xs sm:text-sm text-slate-700 leading-relaxed font-medium">
               {profile.growth}
@@ -221,7 +227,7 @@ export const NumberDetailPage: React.FC = () => {
       <div className="pt-4 text-center">
         <Link to={ROUTES.NUMBER_ANALYSIS}>
           <Button size="lg" variant="primary" rightIcon={<Compass className="w-5 h-5" />}>
-            Analyze My Number
+            {isHindi ? 'मेरे नंबर का विश्लेषण करें' : 'Analyze My Number'}
           </Button>
         </Link>
       </div>
