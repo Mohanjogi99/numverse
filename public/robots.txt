@@ -1,0 +1,13 @@
+# Robots.txt for Numverse (https://numverse.art)
+# Googlebot, Bingbot and search crawlers policy
+
+User-agent: *
+Allow: /
+Disallow: /admin
+Disallow: /checkout/
+Disallow: /payment-success
+Disallow: /payment-failed
+
+# Host and Sitemap declaration
+Host: https://numverse.art
+Sitemap: https://numverse.art/sitemap.xml
