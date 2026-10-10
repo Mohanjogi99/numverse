@@ -155,21 +155,29 @@ export const CheckoutPage: React.FC = () => {
         </div>
 
         {/* Trust & Security Badge */}
-        <div className="p-3.5 rounded-2xl bg-indigo-50/60 dark:bg-indigo-950/40 border border-indigo-100 dark:border-indigo-900/50 text-xs text-indigo-900 dark:text-indigo-200 flex items-center justify-between gap-3">
+        <div className="p-3.5 rounded-2xl bg-indigo-50/60 dark:bg-[#131124] border border-indigo-100 dark:border-purple-900/50 text-xs text-indigo-900 dark:text-indigo-200 flex items-center justify-between gap-3">
           <div className="flex items-center gap-2 font-medium">
-            <ShieldCheck className="w-4 h-4 text-indigo-600 dark:text-indigo-400 shrink-0" />
+            <ShieldCheck className="w-4 h-4 text-pink-500 dark:text-pink-400 shrink-0" />
             <span>{t.checkout.sslBadge}</span>
           </div>
-          <Badge variant="primary" size="sm">
-            Test Mode
+          <Badge
+            variant="outline"
+            size="sm"
+            className={
+              import.meta.env.VITE_RAZORPAY_KEY_ID?.startsWith('rzp_live')
+                ? 'bg-emerald-500/15 text-emerald-600 dark:text-emerald-400 border border-emerald-500/30 font-bold'
+                : 'bg-amber-500/15 text-amber-600 dark:text-amber-400 border border-amber-500/30 font-bold'
+            }
+          >
+            {import.meta.env.VITE_RAZORPAY_KEY_ID?.startsWith('rzp_live') ? '100% Live Secure' : 'Sandbox Mode'}
           </Badge>
         </div>
 
         {/* Payment CTA Button */}
         <Button
           size="lg"
-          variant="gold"
-          className="w-full shadow-lg shadow-amber-500/20"
+          variant="primary"
+          className="w-full text-white font-extrabold text-base sm:text-lg shadow-xl shadow-pink-500/25 active:scale-[0.98] transition-all"
           disabled={isProcessing}
           onClick={handleProceedToPayment}
           leftIcon={

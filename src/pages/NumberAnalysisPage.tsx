@@ -135,9 +135,9 @@ export const NumberAnalysisPage: React.FC = () => {
       </div>
 
       {/* Main Analysis Card */}
-      <Card className="p-6 sm:p-10 border-slate-200/90 dark:border-slate-800 shadow-xl max-w-2xl mx-auto">
+      <Card className="p-6 sm:p-10 border-slate-200/90 dark:border-purple-900/40 bg-white/95 dark:bg-[#110F22]/90 backdrop-blur-xl shadow-2xl max-w-2xl mx-auto">
         {/* Tab Selection */}
-        <div className="grid grid-cols-2 p-1.5 bg-slate-100/80 dark:bg-slate-900/80 rounded-2xl mb-8 border border-transparent dark:border-slate-800">
+        <div className="grid grid-cols-2 p-1.5 bg-slate-100/90 dark:bg-[#16142C] rounded-2xl mb-8 border border-slate-200/60 dark:border-purple-900/40">
           <button
             type="button"
             onClick={() => {
@@ -145,9 +145,9 @@ export const NumberAnalysisPage: React.FC = () => {
               setMobileError('');
               setDobError('');
             }}
-            className={`flex items-center justify-center gap-2 py-3 rounded-xl text-sm font-semibold transition-all ${
+            className={`flex items-center justify-center gap-2 py-3 rounded-xl text-sm font-bold transition-all ${
               tab === 'mobile'
-                ? 'bg-white dark:bg-[#131A2B] text-indigo-700 dark:text-indigo-300 shadow-sm'
+                ? 'bg-gradient-to-r from-purple-600/15 via-pink-500/15 to-amber-500/15 text-pink-600 dark:text-pink-300 border border-pink-500/40 shadow-xs bg-white dark:bg-[#1C1838]'
                 : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
             }`}
           >
@@ -161,9 +161,9 @@ export const NumberAnalysisPage: React.FC = () => {
               setMobileError('');
               setDobError('');
             }}
-            className={`flex items-center justify-center gap-2 py-3 rounded-xl text-sm font-semibold transition-all ${
+            className={`flex items-center justify-center gap-2 py-3 rounded-xl text-sm font-bold transition-all ${
               tab === 'dob'
-                ? 'bg-white dark:bg-[#131A2B] text-indigo-700 dark:text-indigo-300 shadow-sm'
+                ? 'bg-gradient-to-r from-purple-600/15 via-pink-500/15 to-amber-500/15 text-pink-600 dark:text-pink-300 border border-pink-500/40 shadow-xs bg-white dark:bg-[#1C1838]'
                 : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
             }`}
           >
@@ -189,8 +189,8 @@ export const NumberAnalysisPage: React.FC = () => {
             />
 
             {/* Privacy Note */}
-            <div className="flex items-center gap-2 text-xs text-slate-500 dark:text-slate-400 bg-slate-50 dark:bg-slate-900/60 p-3 rounded-xl border border-slate-100 dark:border-slate-800">
-              <Lock className="w-4 h-4 text-indigo-500 dark:text-indigo-400 shrink-0" />
+            <div className="flex items-center gap-2 text-xs text-slate-600 dark:text-slate-400 bg-purple-50/50 dark:bg-purple-950/40 p-3 rounded-xl border border-purple-100 dark:border-purple-900/40">
+              <Lock className="w-4 h-4 text-pink-500 dark:text-pink-400 shrink-0" />
               <span>{t.numberAnalysis.privacyNotice}</span>
             </div>
 
@@ -198,7 +198,7 @@ export const NumberAnalysisPage: React.FC = () => {
               type="submit"
               size="lg"
               variant="primary"
-              className="w-full shadow-card dark:shadow-neon-glow"
+              className="w-full text-white font-bold shadow-lg shadow-pink-500/25 dark:shadow-sunset-glow"
               rightIcon={<ArrowRight className="w-5 h-5" />}
             >
               {t.numberAnalysis.analyzeCta}

@@ -94,17 +94,21 @@ export const HomePage: React.FC = () => {
               <div className="grid grid-cols-5 gap-1.5 my-4">
                 {numberKeys.map((digit) => {
                   const p = getLocalizedNumberProfile(digit, language);
+                  const shortName = p.theme.split(' ')[0];
                   return (
                     <button
                       key={digit}
                       onClick={() => setActiveHeroDigit(digit)}
-                      className={`py-2 px-1 rounded-xl text-xs font-display font-bold transition-all ${
+                      className={`flex flex-col items-center justify-center py-2 px-1 rounded-xl text-center transition-all ${
                         activeHeroDigit === digit
-                          ? 'bg-gradient-to-r from-purple-600 via-pink-500 to-amber-500 text-white shadow-md shadow-pink-500/30 scale-105'
-                          : 'bg-slate-100 dark:bg-slate-800/80 text-slate-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700'
+                          ? 'bg-gradient-to-r from-purple-600 via-pink-500 to-amber-500 text-white shadow-md shadow-pink-500/30 scale-105 font-black'
+                          : 'bg-slate-100 dark:bg-slate-800/80 text-slate-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700 font-bold'
                       }`}
                     >
-                      {digit} {p.theme.split(' ')[0]}
+                      <span className="text-sm leading-none">{digit}</span>
+                      <span className="text-[9px] uppercase tracking-tighter truncate max-w-full mt-0.5 opacity-90">
+                        {shortName}
+                      </span>
                     </button>
                   );
                 })}
@@ -114,19 +118,19 @@ export const HomePage: React.FC = () => {
               <div className="p-4 rounded-2xl bg-gradient-to-br from-pink-50/80 via-purple-50/50 to-amber-50/50 dark:from-purple-950/40 dark:via-pink-950/30 dark:to-amber-950/30 border border-pink-200/60 dark:border-pink-900/40 space-y-2.5 transition-all">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-3">
-                    <div className="w-11 h-11 rounded-xl bg-gradient-to-tr from-purple-600 via-pink-500 to-amber-400 text-white flex items-center justify-center font-display font-black text-xl shadow-md shadow-pink-500/30">
+                    <div className="w-11 h-11 rounded-xl bg-gradient-to-tr from-purple-600 via-pink-500 to-amber-400 text-white flex items-center justify-center font-display font-black text-xl shadow-md shadow-pink-500/30 shrink-0">
                       {activeHeroDigit}
                     </div>
                     <div>
                       <div className="text-base font-display font-bold text-slate-900 dark:text-white">
                         {activeHeroProfile.theme}
                       </div>
-                      <div className="text-xs text-pink-400 font-semibold">
+                      <div className="text-xs text-pink-600 dark:text-pink-400 font-semibold">
                         {activeHeroProfile.tagline}
                       </div>
                     </div>
                   </div>
-                  <Link to={`/number/${activeHeroDigit}`} className="text-pink-400 hover:text-pink-300">
+                  <Link to={`/number/${activeHeroDigit}`} className="text-pink-500 hover:text-pink-400 transition-colors p-1">
                     <ChevronRight className="w-5 h-5" />
                   </Link>
                 </div>
@@ -138,8 +142,8 @@ export const HomePage: React.FC = () => {
               <div className="pt-4 text-center">
                 <Button
                   size="sm"
-                  variant="soft"
-                  className="w-full dark:bg-purple-950/50 dark:text-pink-300 dark:hover:bg-purple-900/50 font-semibold border border-pink-500/20"
+                  variant="primary"
+                  className="w-full text-white font-bold shadow-md shadow-pink-500/20"
                   onClick={() => navigate(ROUTES.NUMBER_ANALYSIS)}
                 >
                   {t.home.discoverDominantBtn}
@@ -415,56 +419,56 @@ export const HomePage: React.FC = () => {
       </section>
 
       {/* 7. TRUST & INTEGRITY SECTION */}
-      <section className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 text-center">
           {/* Card 1: Private by Design */}
-          <Card className="group p-5 space-y-3 border-slate-200/90 dark:border-purple-900/40 bg-white/80 dark:bg-[#110F22]/90 backdrop-blur-xl transition-all duration-300 ease-out hover:-translate-y-1.5 hover:shadow-xl hover:shadow-pink-500/10 dark:hover:shadow-sunset-glow/20 hover:border-pink-500/40 dark:hover:border-pink-500/50 cursor-default">
-            <div className="w-11 h-11 rounded-2xl bg-pink-500/10 dark:bg-pink-500/15 border border-pink-500/20 text-pink-500 dark:text-pink-400 flex items-center justify-center mx-auto transition-transform duration-300 group-hover:scale-110 group-hover:-rotate-3 shadow-xs">
+          <Card className="group p-5 sm:p-6 space-y-3.5 border-slate-200/90 dark:border-purple-900/40 bg-white/95 dark:bg-[#110F22]/90 backdrop-blur-xl transition-all duration-300 ease-out hover:-translate-y-1.5 hover:shadow-xl hover:shadow-pink-500/10 dark:hover:shadow-sunset-glow/20 hover:border-pink-500/40 dark:hover:border-pink-500/50 flex flex-col justify-start h-full cursor-default">
+            <div className="w-12 h-12 rounded-2xl bg-pink-500/10 dark:bg-pink-500/15 border border-pink-500/20 text-pink-500 dark:text-pink-400 flex items-center justify-center mx-auto transition-transform duration-300 group-hover:scale-110 group-hover:-rotate-3 shadow-xs">
               <Lock className="w-5 h-5" />
             </div>
-            <h4 className="font-display font-bold text-slate-900 dark:text-white text-sm group-hover:text-pink-400 transition-colors">
+            <h4 className="font-display font-bold text-slate-900 dark:text-white text-base group-hover:text-pink-400 transition-colors">
               {t.home.trustPrivate}
             </h4>
-            <p className="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
+            <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-400 leading-relaxed">
               {t.home.trustPrivateDesc}
             </p>
           </Card>
 
           {/* Card 2: Self-Reflection Focused */}
-          <Card className="group p-5 space-y-3 border-slate-200/90 dark:border-purple-900/40 bg-white/80 dark:bg-[#110F22]/90 backdrop-blur-xl transition-all duration-300 ease-out hover:-translate-y-1.5 hover:shadow-xl hover:shadow-purple-500/10 dark:hover:shadow-indigo-glow/20 hover:border-purple-500/40 dark:hover:border-purple-500/50 cursor-default">
-            <div className="w-11 h-11 rounded-2xl bg-purple-500/10 dark:bg-purple-500/15 border border-purple-500/20 text-purple-600 dark:text-purple-400 flex items-center justify-center mx-auto transition-transform duration-300 group-hover:scale-110 group-hover:rotate-3 shadow-xs">
+          <Card className="group p-5 sm:p-6 space-y-3.5 border-slate-200/90 dark:border-purple-900/40 bg-white/95 dark:bg-[#110F22]/90 backdrop-blur-xl transition-all duration-300 ease-out hover:-translate-y-1.5 hover:shadow-xl hover:shadow-purple-500/10 dark:hover:shadow-indigo-glow/20 hover:border-purple-500/40 dark:hover:border-purple-500/50 flex flex-col justify-start h-full cursor-default">
+            <div className="w-12 h-12 rounded-2xl bg-purple-500/10 dark:bg-purple-500/15 border border-purple-500/20 text-purple-600 dark:text-purple-400 flex items-center justify-center mx-auto transition-transform duration-300 group-hover:scale-110 group-hover:rotate-3 shadow-xs">
               <Sparkles className="w-5 h-5" />
             </div>
-            <h4 className="font-display font-bold text-slate-900 dark:text-white text-sm group-hover:text-purple-400 transition-colors">
+            <h4 className="font-display font-bold text-slate-900 dark:text-white text-base group-hover:text-purple-400 transition-colors">
               {t.home.trustReflection}
             </h4>
-            <p className="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
+            <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-400 leading-relaxed">
               {t.home.trustReflectionDesc}
             </p>
           </Card>
 
           {/* Card 3: No Guaranteed Predictions */}
-          <Card className="group p-5 space-y-3 border-slate-200/90 dark:border-purple-900/40 bg-white/80 dark:bg-[#110F22]/90 backdrop-blur-xl transition-all duration-300 ease-out hover:-translate-y-1.5 hover:shadow-xl hover:shadow-emerald-500/10 dark:hover:shadow-emerald-500/10 hover:border-emerald-500/40 dark:hover:border-emerald-500/50 cursor-default">
-            <div className="w-11 h-11 rounded-2xl bg-emerald-500/10 dark:bg-emerald-500/15 border border-emerald-500/20 text-emerald-600 dark:text-emerald-400 flex items-center justify-center mx-auto transition-transform duration-300 group-hover:scale-110 group-hover:-rotate-3 shadow-xs">
+          <Card className="group p-5 sm:p-6 space-y-3.5 border-slate-200/90 dark:border-purple-900/40 bg-white/95 dark:bg-[#110F22]/90 backdrop-blur-xl transition-all duration-300 ease-out hover:-translate-y-1.5 hover:shadow-xl hover:shadow-emerald-500/10 dark:hover:shadow-emerald-500/10 hover:border-emerald-500/40 dark:hover:border-emerald-500/50 flex flex-col justify-start h-full cursor-default">
+            <div className="w-12 h-12 rounded-2xl bg-emerald-500/10 dark:bg-emerald-500/15 border border-emerald-500/20 text-emerald-600 dark:text-emerald-400 flex items-center justify-center mx-auto transition-transform duration-300 group-hover:scale-110 group-hover:-rotate-3 shadow-xs">
               <ShieldCheck className="w-5 h-5" />
             </div>
-            <h4 className="font-display font-bold text-slate-900 dark:text-white text-sm group-hover:text-emerald-400 transition-colors">
+            <h4 className="font-display font-bold text-slate-900 dark:text-white text-base group-hover:text-emerald-400 transition-colors">
               {t.home.trustHonest}
             </h4>
-            <p className="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
+            <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-400 leading-relaxed">
               {t.home.trustHonestDesc}
             </p>
           </Card>
 
           {/* Card 4: Secure Payments */}
-          <Card className="group p-5 space-y-3 border-slate-200/90 dark:border-purple-900/40 bg-white/80 dark:bg-[#110F22]/90 backdrop-blur-xl transition-all duration-300 ease-out hover:-translate-y-1.5 hover:shadow-xl hover:shadow-amber-500/10 dark:hover:shadow-amber-glow/20 hover:border-amber-500/40 dark:hover:border-amber-500/50 cursor-default">
-            <div className="w-11 h-11 rounded-2xl bg-amber-500/10 dark:bg-amber-500/15 border border-amber-500/20 text-amber-600 dark:text-amber-400 flex items-center justify-center mx-auto transition-transform duration-300 group-hover:scale-110 group-hover:rotate-3 shadow-xs">
+          <Card className="group p-5 sm:p-6 space-y-3.5 border-slate-200/90 dark:border-purple-900/40 bg-white/95 dark:bg-[#110F22]/90 backdrop-blur-xl transition-all duration-300 ease-out hover:-translate-y-1.5 hover:shadow-xl hover:shadow-amber-500/10 dark:hover:shadow-amber-glow/20 hover:border-amber-500/40 dark:hover:border-amber-500/50 flex flex-col justify-start h-full cursor-default">
+            <div className="w-12 h-12 rounded-2xl bg-amber-500/10 dark:bg-amber-500/15 border border-amber-500/20 text-amber-600 dark:text-amber-400 flex items-center justify-center mx-auto transition-transform duration-300 group-hover:scale-110 group-hover:rotate-3 shadow-xs">
               <HeartHandshake className="w-5 h-5" />
             </div>
-            <h4 className="font-display font-bold text-slate-900 dark:text-white text-sm group-hover:text-amber-400 transition-colors">
+            <h4 className="font-display font-bold text-slate-900 dark:text-white text-base group-hover:text-amber-400 transition-colors">
               {t.home.trustSecure}
             </h4>
-            <p className="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
+            <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-400 leading-relaxed">
               {t.home.trustSecureDesc}
             </p>
           </Card>

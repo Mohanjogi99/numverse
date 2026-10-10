@@ -31,17 +31,17 @@ export const Button: React.FC<ButtonProps> = ({
 
   const variantStyles = {
     primary:
-      'bg-indigo-600 text-white hover:bg-indigo-700 active:bg-indigo-800 focus:ring-indigo-500 shadow-indigo-200/50 hover:shadow-card-hover',
+      'bg-gradient-to-r from-purple-600 via-pink-500 to-amber-500 text-white hover:from-purple-500 hover:via-pink-400 hover:to-amber-400 font-bold shadow-md shadow-pink-500/25 hover:shadow-lg active:scale-95 focus:ring-pink-500 border-none',
     secondary:
-      'bg-purple-600 text-white hover:bg-purple-700 active:bg-purple-800 focus:ring-purple-500 shadow-purple-200/50',
+      'bg-gradient-to-r from-purple-700 to-indigo-700 text-white hover:from-purple-600 hover:to-indigo-600 font-semibold shadow-md shadow-purple-500/20 focus:ring-purple-500 border-none',
     outline:
-      'border border-slate-300 bg-white text-slate-700 hover:bg-slate-50 hover:border-slate-400 focus:ring-indigo-500',
+      'border border-slate-300 dark:border-purple-900/50 bg-white dark:bg-[#131124] text-slate-800 dark:text-slate-200 hover:bg-slate-50 dark:hover:bg-purple-950/40 hover:border-pink-500/50 focus:ring-pink-500',
     ghost:
-      'text-slate-600 hover:text-indigo-600 hover:bg-indigo-50/50 focus:ring-indigo-500',
+      'text-slate-700 dark:text-slate-300 hover:text-pink-500 dark:hover:text-pink-400 hover:bg-pink-500/10 focus:ring-pink-500',
     gold:
-      'bg-gradient-to-r from-amber-500 to-amber-600 text-white hover:from-amber-600 hover:to-amber-700 focus:ring-amber-400 shadow-amber-200/50',
+      'bg-gradient-to-r from-pink-500 via-rose-500 to-amber-400 text-white hover:from-pink-400 hover:via-rose-400 hover:to-amber-300 font-bold shadow-md shadow-amber-500/25 focus:ring-amber-400 border-none',
     soft:
-      'bg-indigo-50 text-indigo-700 hover:bg-indigo-100 active:bg-indigo-200 focus:ring-indigo-400',
+      'bg-pink-500/10 dark:bg-pink-500/20 text-pink-600 dark:text-pink-300 hover:bg-pink-500/20 dark:hover:bg-pink-500/30 border border-pink-500/30 focus:ring-pink-500',
   };
 
   return (

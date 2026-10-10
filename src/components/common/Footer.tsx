@@ -12,9 +12,9 @@ export const Footer: React.FC = () => {
   return (
     <footer className="bg-[#0A0914] text-slate-400 pt-12 pb-8 border-t border-purple-950/60">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-10">
-          {/* Brand Col */}
-          <div className="md:col-span-2 space-y-4">
+        <div className="grid grid-cols-1 md:grid-cols-12 gap-8 mb-10">
+          {/* Brand Col (5 cols) */}
+          <div className="md:col-span-5 space-y-4">
             <Link to={ROUTES.HOME} className="inline-block">
               <BrandLogo size="lg" showText={true} showTagline={true} />
             </Link>
@@ -26,8 +26,8 @@ export const Footer: React.FC = () => {
             </p>
           </div>
 
-          {/* Quick Links */}
-          <div className="space-y-3">
+          {/* Quick Links (3 cols) */}
+          <div className="md:col-span-3 space-y-3">
             <h4 className="text-xs font-semibold uppercase tracking-wider text-slate-300">
               {t.footer.quickLinks}
             </h4>
@@ -55,22 +55,22 @@ export const Footer: React.FC = () => {
             </ul>
           </div>
 
-          {/* Number Themes */}
-          <div className="space-y-3">
+          {/* Number Themes (4 cols with ample spacing) */}
+          <div className="md:col-span-4 space-y-3">
             <h4 className="text-xs font-semibold uppercase tracking-wider text-slate-300">
               {isHindi ? '0–9 अंक ऊर्जा' : '0–9 Themes'}
             </h4>
-            <div className="grid grid-cols-2 gap-x-2 gap-y-1.5 text-xs">
-              <Link to="/number/0" className="hover:text-white transition-colors">0 • {isHindi ? 'संतुलन' : 'Balance'}</Link>
-              <Link to="/number/1" className="hover:text-white transition-colors">1 • {isHindi ? 'धन' : 'Money'}</Link>
-              <Link to="/number/2" className="hover:text-white transition-colors">2 • {isHindi ? 'संवाद' : 'Communication'}</Link>
-              <Link to="/number/3" className="hover:text-white transition-colors">3 • {isHindi ? 'ज्ञान' : 'Knowledge'}</Link>
-              <Link to="/number/4" className="hover:text-white transition-colors">4 • {isHindi ? 'कौशल' : 'Creation'}</Link>
-              <Link to="/number/5" className="hover:text-white transition-colors">5 • {isHindi ? 'विस्तार' : 'Power'}</Link>
-              <Link to="/number/6" className="hover:text-white transition-colors">6 • {isHindi ? 'सद्भाव' : 'Peace'}</Link>
-              <Link to="/number/7" className="hover:text-white transition-colors">7 • {isHindi ? 'सत्य' : 'Truth'}</Link>
-              <Link to="/number/8" className="hover:text-white transition-colors">8 • {isHindi ? 'अधिकार' : 'Authority'}</Link>
-              <Link to="/number/9" className="hover:text-white transition-colors">9 • {isHindi ? 'करुणा' : 'Compassion'}</Link>
+            <div className="grid grid-cols-2 gap-x-6 gap-y-2 text-xs">
+              <Link to="/number/0" className="hover:text-pink-300 transition-colors whitespace-nowrap">0 • {isHindi ? 'संतुलन' : 'Balance'}</Link>
+              <Link to="/number/1" className="hover:text-pink-300 transition-colors whitespace-nowrap">1 • {isHindi ? 'धन' : 'Money'}</Link>
+              <Link to="/number/2" className="hover:text-pink-300 transition-colors whitespace-nowrap">2 • {isHindi ? 'संवाद' : 'Communication'}</Link>
+              <Link to="/number/3" className="hover:text-pink-300 transition-colors whitespace-nowrap">3 • {isHindi ? 'ज्ञान' : 'Knowledge'}</Link>
+              <Link to="/number/4" className="hover:text-pink-300 transition-colors whitespace-nowrap">4 • {isHindi ? 'कौशल' : 'Creation'}</Link>
+              <Link to="/number/5" className="hover:text-pink-300 transition-colors whitespace-nowrap">5 • {isHindi ? 'विस्तार' : 'Power'}</Link>
+              <Link to="/number/6" className="hover:text-pink-300 transition-colors whitespace-nowrap">6 • {isHindi ? 'सद्भाव' : 'Peace'}</Link>
+              <Link to="/number/7" className="hover:text-pink-300 transition-colors whitespace-nowrap">7 • {isHindi ? 'सत्य' : 'Truth'}</Link>
+              <Link to="/number/8" className="hover:text-pink-300 transition-colors whitespace-nowrap">8 • {isHindi ? 'अधिकार' : 'Authority'}</Link>
+              <Link to="/number/9" className="hover:text-pink-300 transition-colors whitespace-nowrap">9 • {isHindi ? 'करुणा' : 'Compassion'}</Link>
             </div>
           </div>
         </div>

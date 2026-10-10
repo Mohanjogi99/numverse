@@ -22,13 +22,13 @@ export const EmptyState: React.FC<EmptyStateProps> = ({
   icon,
 }) => {
   return (
-    <Card className="p-8 sm:p-12 text-center space-y-4 bg-slate-50/70 border-dashed border-2 border-slate-200">
-      <div className="w-12 h-12 rounded-2xl bg-indigo-50 text-indigo-600 flex items-center justify-center mx-auto">
+    <Card className="p-8 sm:p-12 text-center space-y-4 bg-slate-50/80 dark:bg-[#110F22]/70 border-dashed border-2 border-slate-200 dark:border-purple-900/40 backdrop-blur-sm">
+      <div className="w-12 h-12 rounded-2xl bg-pink-500/10 dark:bg-pink-500/20 border border-pink-500/20 text-pink-500 dark:text-pink-400 flex items-center justify-center mx-auto shadow-xs">
         {icon || <Compass className="w-6 h-6" />}
       </div>
       <div className="space-y-1 max-w-sm mx-auto">
-        <h3 className="font-display font-bold text-slate-800 text-base sm:text-lg">{title}</h3>
-        <p className="text-xs sm:text-sm text-slate-500 leading-relaxed">{description}</p>
+        <h3 className="font-display font-bold text-slate-900 dark:text-white text-base sm:text-lg">{title}</h3>
+        <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-400 leading-relaxed">{description}</p>
       </div>
       {(actionText && (actionHref || onAction)) && (
         <div className="pt-2">
