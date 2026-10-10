@@ -9,6 +9,10 @@ import {
   HeartHandshake,
   CheckCircle2,
   ChevronRight,
+  TrendingUp,
+  Heart,
+  Coins,
+  Brain,
 } from 'lucide-react';
 import { Button } from '../components/ui/Button';
 import { Card } from '../components/ui/Card';
@@ -25,7 +29,7 @@ import { getLocalizedNumberProfile, getLocalizedPersonalityArchetype } from '../
 
 export const HomePage: React.FC = () => {
   const navigate = useNavigate();
-  const { language, t } = useLanguage();
+  const { language, t, isHindi } = useLanguage();
   const [activeHeroDigit, setActiveHeroDigit] = useState<SingleDigit>(7);
 
   const numberKeys: SingleDigit[] = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9];
@@ -154,8 +158,139 @@ export const HomePage: React.FC = () => {
         </div>
       </section>
 
-      {/* 2. HOW IT WORKS */}
+      {/* 1.5 VISUAL SIGNIFICANCE / NUMEROLOGY MATRIX SHOWCASE */}
+      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="relative rounded-3xl overflow-hidden bg-gradient-to-br from-[#0B0D1B] via-[#120D27] to-[#1A0E2E] border border-purple-500/30 shadow-2xl p-6 sm:p-10 lg:p-12 text-white">
+          {/* Subtle Ambient Glow */}
+          <div className="absolute -top-24 -right-24 w-96 h-96 bg-purple-600/20 rounded-full blur-3xl pointer-events-none" />
+          <div className="absolute -bottom-24 -left-24 w-96 h-96 bg-pink-600/15 rounded-full blur-3xl pointer-events-none" />
 
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center relative z-10">
+            {/* Left: Engaging Numerology Art Image with Glow Frame */}
+            <div className="lg:col-span-6 order-2 lg:order-1">
+              <div className="relative group rounded-2xl overflow-hidden border border-purple-400/40 shadow-2xl shadow-purple-950/50 bg-black/40">
+                <img
+                  src="/images/numerology-showcase.jpg"
+                  alt={isHindi ? "अंकशास्त्र और जीवन स्तम्भ आत्म-खोज" : "Numerology and Life Pillars Cosmic Matrix"}
+                  className="w-full h-auto object-cover transform group-hover:scale-105 transition-transform duration-700 ease-out"
+                  loading="lazy"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-transparent to-transparent opacity-60 group-hover:opacity-40 transition-opacity" />
+
+                {/* Floating Badge Over Image */}
+                <div className="absolute bottom-4 left-4 right-4 flex items-center justify-between backdrop-blur-md bg-slate-950/80 border border-purple-400/30 rounded-xl p-3 text-xs">
+                  <div className="flex items-center gap-2">
+                    <span className="w-2 h-2 rounded-full bg-emerald-400 animate-ping" />
+                    <span className="font-semibold text-purple-200">
+                      {isHindi ? "प्रत्यक्ष कॉस्मिक फ्रीक्वेंसी मैट्रिक्स" : "Live Frequency Matrix"}
+                    </span>
+                  </div>
+                  <span className="font-mono text-amber-300 font-bold">0 — 9 VIBRATIONS</span>
+                </div>
+              </div>
+            </div>
+
+            {/* Right: Explanation & Life Pillar Highlights */}
+            <div className="lg:col-span-6 space-y-6 order-1 lg:order-2">
+              <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-purple-500/20 border border-purple-400/40 text-purple-300 text-xs font-bold uppercase tracking-wider">
+                <Sparkles className="w-4 h-4 text-purple-300" />
+                <span>{isHindi ? "अंकों का आपके जीवन पर गहरा प्रभाव" : "The Power of Numerology & Frequency"}</span>
+              </div>
+
+              <h2 className="text-2xl sm:text-4xl font-display font-extrabold tracking-tight leading-tight text-white">
+                {isHindi ? (
+                  <>
+                    अंक केवल संख्याएं नहीं हैं, <br />
+                    <span className="text-transparent bg-clip-text bg-gradient-to-r from-purple-400 via-pink-400 to-amber-300">
+                      वे आपके जीवन का ब्लूप्रिंट हैं
+                    </span>
+                  </>
+                ) : (
+                  <>
+                    Numbers Are Not Just Digits, <br />
+                    <span className="text-transparent bg-clip-text bg-gradient-to-r from-purple-400 via-pink-400 to-amber-300">
+                      They Are Your Life’s Blueprint
+                    </span>
+                  </>
+                )}
+              </h2>
+
+              <p className="text-sm sm:text-base text-slate-300 leading-relaxed">
+                {isHindi
+                  ? "आपकी जन्मतिथि (DOB) और दैनिक मोबाइल नंबर की आवृति (Frequency) आपके 4 प्रमुख जीवन क्षेत्रों—करियर, रिश्ते, वित्तीय वृद्धि और मानसिक संतुलन को सीधे प्रभावित करती है।"
+                  : "Your Date of Birth (DOB) and daily mobile number frequencies directly shape 4 critical life pillars—Career, Relationships, Financial Growth, and Mental Balance."}
+              </p>
+
+              {/* 4 Feature Badges Grid */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-1">
+                <div className="p-3.5 rounded-xl bg-white/5 border border-purple-500/20 backdrop-blur-sm space-y-1 hover:border-purple-400/40 transition-colors">
+                  <div className="flex items-center gap-2 text-indigo-300 font-bold text-sm">
+                    <TrendingUp className="w-4 h-4 text-indigo-400" />
+                    <span>{isHindi ? "करियर और उद्देश्य" : "Career & Purpose"}</span>
+                  </div>
+                  <p className="text-[11px] sm:text-xs text-slate-400 leading-normal">
+                    {isHindi ? "लीडरशिप और सही दिशा की पहचान" : "Identify natural leadership & timing"}
+                  </p>
+                </div>
+
+                <div className="p-3.5 rounded-xl bg-white/5 border border-purple-500/20 backdrop-blur-sm space-y-1 hover:border-pink-400/40 transition-colors">
+                  <div className="flex items-center gap-2 text-pink-300 font-bold text-sm">
+                    <Heart className="w-4 h-4 text-pink-400" />
+                    <span>{isHindi ? "रिश्ते और प्रेम" : "Relationships"}</span>
+                  </div>
+                  <p className="text-[11px] sm:text-xs text-slate-400 leading-normal">
+                    {isHindi ? "आंतरिक तालमेल और समझ" : "Harmonize communication & bond"}
+                  </p>
+                </div>
+
+                <div className="p-3.5 rounded-xl bg-white/5 border border-purple-500/20 backdrop-blur-sm space-y-1 hover:border-amber-400/40 transition-colors">
+                  <div className="flex items-center gap-2 text-amber-300 font-bold text-sm">
+                    <Coins className="w-4 h-4 text-amber-400" />
+                    <span>{isHindi ? "वित्तीय समृद्धि" : "Financial Growth"}</span>
+                  </div>
+                  <p className="text-[11px] sm:text-xs text-slate-400 leading-normal">
+                    {isHindi ? "अवसर और निर्णय लेने की शक्ति" : "Unlock abundance & decision clarity"}
+                  </p>
+                </div>
+
+                <div className="p-3.5 rounded-xl bg-white/5 border border-purple-500/20 backdrop-blur-sm space-y-1 hover:border-emerald-400/40 transition-colors">
+                  <div className="flex items-center gap-2 text-emerald-300 font-bold text-sm">
+                    <Brain className="w-4 h-4 text-emerald-400" />
+                    <span>{isHindi ? "मानसिक स्पष्टता" : "Inner Harmony"}</span>
+                  </div>
+                  <p className="text-[11px] sm:text-xs text-slate-400 leading-normal">
+                    {isHindi ? "तनाव मुक्ति और ऊर्जा संतुलन" : "Psychological balance & focus"}
+                  </p>
+                </div>
+              </div>
+
+              {/* Action Button */}
+              <div className="pt-2 flex flex-col sm:flex-row gap-3">
+                <Link to={ROUTES.NUMBER_ANALYSIS} className="w-full sm:w-auto">
+                  <Button
+                    size="md"
+                    className="w-full sm:w-auto bg-gradient-to-r from-purple-600 via-pink-500 to-amber-500 hover:from-purple-500 hover:via-pink-400 hover:to-amber-400 text-white font-bold shadow-lg shadow-pink-500/25 border-none"
+                    rightIcon={<ArrowRight className="w-4 h-4" />}
+                  >
+                    {isHindi ? "अपना नंबर अभी जांचें" : "Analyze Your Numbers Now"}
+                  </Button>
+                </Link>
+                <Link to={ROUTES.PERSONALITY_TEST} className="w-full sm:w-auto">
+                  <Button
+                    size="md"
+                    variant="outline"
+                    className="w-full sm:w-auto border-purple-500/40 text-purple-200 hover:bg-purple-950/50 hover:text-white"
+                  >
+                    {isHindi ? "व्यक्तित्व टेस्ट लें" : "Take Personality Test"}
+                  </Button>
+                </Link>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* 2. HOW IT WORKS */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center max-w-2xl mx-auto mb-12 space-y-2">
           <h2 className="text-xs font-bold uppercase tracking-widest text-indigo-600 dark:text-indigo-400">{t.home.methodologyTitle}</h2>
