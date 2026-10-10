@@ -17,8 +17,14 @@ import {
   Globe,
   Loader2,
   AlertTriangle,
-  Bot,
   Flame,
+  ChevronLeft,
+  ChevronRight,
+  BookOpenCheck,
+  ListOrdered,
+  FileText,
+  Layers,
+  Compass,
 } from 'lucide-react';
 import { FusionAnalysisResult, PillarKey, PillarProfile } from '../types/fusion';
 import { StructuredAIReportContent, SupportedLanguage } from '../types/aiReport';
@@ -65,6 +71,8 @@ export const ReportViewPage: React.FC = () => {
   const [aiStatus, setAiStatus] = useState<'idle' | 'generating' | 'ready' | 'failed'>('idle');
   const [aiErrorMessage, setAiErrorMessage] = useState<string | null>(null);
   const [hasEntitlement, setHasEntitlement] = useState(false);
+  const [activeChapterIndex, setActiveChapterIndex] = useState<number>(0);
+  const [readerViewMode, setReaderViewMode] = useState<'chapters' | 'continuous'>('chapters');
 
 
   useEffect(() => {
@@ -359,65 +367,97 @@ export const ReportViewPage: React.FC = () => {
         </div>
       </div>
 
-      {/* 2. AI Personalized Story Section */}
-      <Card className="p-6 sm:p-8 space-y-6">
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-slate-100 dark:border-slate-800">
+      {/* 2. 5,000+ Words 12-Chapter Deep Dossier Master Reader */}
+      <Card className="p-6 sm:p-8 space-y-6 print:p-0 print:border-none print:shadow-none">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-slate-100 dark:border-slate-800 print:hidden">
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 rounded-2xl bg-gradient-to-br from-indigo-500 to-purple-600 text-white flex items-center justify-center shadow-md shadow-indigo-500/20">
-              <Bot className="w-5 h-5" />
+              <BookOpenCheck className="w-5 h-5" />
             </div>
             <div>
-              <div className="flex items-center gap-2">
+              <div className="flex flex-wrap items-center gap-2">
                 <h2 className="text-xl sm:text-2xl font-display font-bold text-slate-900 dark:text-slate-100">
-                  {selectedLanguage === 'hi' ? 'आपकी व्यक्तिगत AI कहानी' : 'Your Personalized AI Story'}
+                  {selectedLanguage === 'hi'
+                    ? 'विस्तृत कॉस्मिक एवं मनोवैज्ञानिक महा-दस्तावेज़'
+                    : 'Deep Cosmic & Psychological Master Dossier'}
                 </h2>
                 <Badge variant="gold" size="sm">
-                  AI Narrative Layer
+                  📖 5,200+ Words • 12 Chapters
                 </Badge>
               </div>
               <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
                 {selectedLanguage === 'hi'
-                  ? 'आपकी आधिकारिक नंबर स्टोरी प्रोफ़ाइल पर आधारित संरचित व्यक्तिगत आत्म-चिंतन।'
-                  : 'Synthesized narrative written from your authoritative deterministic profile.'}
+                  ? 'आपकी 40% अंक आवृत्ति और 60% मनोवैज्ञानिक व्यक्तित्व का 12 अध्यायों में संपूर्ण जीवन ब्लूप्रिंट।'
+                  : 'An exhaustive 12-chapter publication-grade life architecture & daily action blueprint.'}
               </p>
             </div>
           </div>
 
-          {aiStatus !== 'generating' && (
-            <Button
-              size="sm"
-              variant={aiStatus === 'ready' ? 'outline' : 'primary'}
-              leftIcon={<Flame className="w-4 h-4 text-amber-500" />}
-              onClick={handleGenerateAIReport}
-            >
-              {aiStatus === 'ready'
-                ? selectedLanguage === 'hi'
-                  ? 'कहानी पुनः उत्पन्न करें'
-                  : 'Regenerate Story'
-                : selectedLanguage === 'hi'
-                ? 'मेरी व्यक्तिगत कहानी बनाएं'
-                : 'Generate My Personalized Story'}
-            </Button>
-          )}
-        </div>
+          <div className="flex items-center gap-2">
+            {aiStatus === 'ready' && aiContent?.chapters && (
+              <div className="inline-flex items-center gap-1 bg-slate-100 dark:bg-slate-900/80 p-1 rounded-xl text-xs font-semibold border border-slate-200/60 dark:border-slate-800">
+                <button
+                  onClick={() => setReaderViewMode('chapters')}
+                  className={`px-3 py-1.5 rounded-lg flex items-center gap-1.5 transition-all ${
+                    readerViewMode === 'chapters'
+                      ? 'bg-white dark:bg-indigo-600 text-indigo-600 dark:text-white shadow-sm'
+                      : 'text-slate-600 dark:text-slate-400'
+                  }`}
+                  title="Chapter-by-Chapter Interactive Reader"
+                >
+                  <ListOrdered className="w-3.5 h-3.5" />
+                  <span>{selectedLanguage === 'hi' ? 'अध्याय दृश्य' : 'Chapters'}</span>
+                </button>
+                <button
+                  onClick={() => setReaderViewMode('continuous')}
+                  className={`px-3 py-1.5 rounded-lg flex items-center gap-1.5 transition-all ${
+                    readerViewMode === 'continuous'
+                      ? 'bg-white dark:bg-indigo-600 text-indigo-600 dark:text-white shadow-sm'
+                      : 'text-slate-600 dark:text-slate-400'
+                  }`}
+                  title="Continuous Complete Reading / PDF Mode"
+                >
+                  <FileText className="w-3.5 h-3.5" />
+                  <span>{selectedLanguage === 'hi' ? 'संपूर्ण पाठ' : 'Continuous'}</span>
+                </button>
+              </div>
+            )}
 
+            {aiStatus !== 'generating' && (
+              <Button
+                size="sm"
+                variant={aiStatus === 'ready' ? 'outline' : 'primary'}
+                leftIcon={<Flame className="w-4 h-4 text-amber-500" />}
+                onClick={handleGenerateAIReport}
+              >
+                {aiStatus === 'ready'
+                  ? selectedLanguage === 'hi'
+                    ? 'पुनः संकलित करें'
+                    : 'Regenerate Dossier'
+                  : selectedLanguage === 'hi'
+                  ? '5,000+ शब्दों का महा-दस्तावेज़ खोलें'
+                  : 'Open 5,000+ Words Dossier'}
+              </Button>
+            )}
+          </div>
+        </div>
 
         {/* AI Loading State */}
         {aiStatus === 'generating' && (
           <div className="py-12 text-center space-y-4">
-            <div className="w-12 h-12 rounded-2xl bg-indigo-50 text-indigo-600 flex items-center justify-center mx-auto animate-spin">
+            <div className="w-12 h-12 rounded-2xl bg-indigo-50 dark:bg-indigo-950/40 text-indigo-600 dark:text-indigo-400 flex items-center justify-center mx-auto animate-spin">
               <Loader2 className="w-6 h-6" />
             </div>
             <div className="space-y-1">
-              <h3 className="font-display font-bold text-slate-900 text-base">
+              <h3 className="font-display font-bold text-slate-900 dark:text-slate-100 text-base">
                 {selectedLanguage === 'hi'
-                  ? 'आपकी व्यक्तिगत कहानी तैयार की जा रही है...'
-                  : 'Preparing your personalized story...'}
+                  ? '12 अध्यायों का 5,000+ शब्दों का महा-दस्तावेज़ संकलित किया जा रहा है...'
+                  : 'Compiling 12-Chapter 5,000+ Words Master Dossier...'}
               </h3>
-              <p className="text-xs text-slate-500 max-w-sm mx-auto">
+              <p className="text-xs text-slate-500 dark:text-slate-400 max-w-md mx-auto">
                 {selectedLanguage === 'hi'
-                  ? 'ओपनएआई रिस्पॉन्स एपीआई द्वारा आपकी संरचित प्रोफाइल का विश्लेषण किया जा रहा है।'
-                  : 'Weaving your 40% numeric patterns and 60% personality dimensions into a cohesive reflection.'}
+                  ? 'आपके 40% अंक कंपन और 60% व्यक्तित्व डीएनए का गहन कॉस्मिक विश्लेषण तैयार हो रहा है।'
+                  : 'Synthesizing 40% Cosmic Number baseline & 60% Psychological DNA across all life dimensions.'}
               </p>
             </div>
           </div>
@@ -425,14 +465,14 @@ export const ReportViewPage: React.FC = () => {
 
         {/* AI Failed Notice with Fallback */}
         {aiStatus === 'failed' && (
-          <div className="p-4 rounded-2xl bg-amber-50 border border-amber-200/80 flex items-start gap-3 text-amber-900">
-            <AlertTriangle className="w-5 h-5 text-amber-600 shrink-0 mt-0.5" />
+          <div className="p-4 rounded-2xl bg-amber-50 dark:bg-amber-950/30 border border-amber-200/80 dark:border-amber-800/60 flex items-start gap-3 text-amber-900 dark:text-amber-200">
+            <AlertTriangle className="w-5 h-5 text-amber-600 dark:text-amber-400 shrink-0 mt-0.5" />
             <div className="space-y-1">
               <h4 className="text-xs font-bold uppercase tracking-wider">
                 {selectedLanguage === 'hi' ? 'AI सूचना' : 'AI Narrative Notice'}
               </h4>
-              <p className="text-xs text-amber-800 leading-relaxed">
-                {aiErrorMessage || "We couldn't generate your personalized story right now. Please try again."}
+              <p className="text-xs text-amber-800 dark:text-amber-300 leading-relaxed">
+                {aiErrorMessage || "We couldn't generate your master dossier right now. Please try again."}
               </p>
               <div className="pt-2">
                 <Button size="sm" variant="outline" onClick={handleGenerateAIReport}>
@@ -443,13 +483,13 @@ export const ReportViewPage: React.FC = () => {
           </div>
         )}
 
-        {/* AI Ready Narrative Content */}
+        {/* AI Ready 5,000+ Words Master Dossier */}
         {aiStatus === 'ready' && aiContent && (
           <div className="space-y-6 animate-fade-in">
             {/* Signature Sentence Callout */}
             <div className="p-6 rounded-2xl bg-gradient-to-r from-indigo-950 via-slate-900 to-purple-950 text-white shadow-lg space-y-2 border border-indigo-800/40">
               <span className="text-[11px] font-bold uppercase tracking-widest text-indigo-300">
-                Core Signature Reflection
+                Core Signature Reflection • मूल कॉस्मिक हस्ताक्षर
               </span>
               <p className="text-base sm:text-lg font-display italic font-medium leading-relaxed">
                 "{aiContent.signatureSentence}"
@@ -459,138 +499,274 @@ export const ReportViewPage: React.FC = () => {
             {/* Executive Summary */}
             <div className="p-5 rounded-2xl bg-slate-50 dark:bg-slate-900/60 border border-slate-100 dark:border-slate-800 space-y-2">
               <h4 className="text-xs font-bold uppercase tracking-wider text-slate-700 dark:text-slate-300">
-                {selectedLanguage === 'hi' ? 'सारांश' : 'Executive Reflection'}
+                {selectedLanguage === 'hi' ? 'कार्यकारी सारांश' : 'Executive Reflection & Synthesis'}
               </h4>
               <p className="text-xs sm:text-sm text-slate-700 dark:text-slate-300 leading-relaxed">
                 {aiContent.summary}
               </p>
             </div>
 
-            {/* Full Story Narrative */}
-            <div className="space-y-3">
-              <h4 className="text-base sm:text-lg font-display font-bold text-slate-900 dark:text-slate-100">
-                {aiContent.title}
-              </h4>
-              <p className="text-xs sm:text-sm text-slate-700 dark:text-slate-300 leading-relaxed whitespace-pre-line bg-white dark:bg-slate-900/80 p-6 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm">
-                {aiContent.story}
-              </p>
-            </div>
+            {/* 12-Chapter Interactive Carousel & Reader */}
+            {aiContent.chapters && aiContent.chapters.length > 0 ? (
+              <div className="space-y-6">
+                {/* Mode 1: Chapter-by-Chapter Navigator */}
+                {readerViewMode === 'chapters' && (
+                  <div className="space-y-6 print:hidden">
+                    {/* Chapter Selector Tabs / Badges */}
+                    <div className="space-y-2">
+                      <div className="flex items-center justify-between text-xs text-slate-500 dark:text-slate-400">
+                        <span className="font-semibold uppercase tracking-wider flex items-center gap-1.5">
+                          <Layers className="w-3.5 h-3.5 text-indigo-500" />
+                          <span>{selectedLanguage === 'hi' ? '12 अध्यायों की सूची' : '12 Chapters Index'}</span>
+                        </span>
+                        <span>
+                          {selectedLanguage === 'hi' ? 'अध्याय' : 'Chapter'} {activeChapterIndex + 1} / {aiContent.chapters.length}
+                        </span>
+                      </div>
+                      <div className="flex items-center gap-2 overflow-x-auto pb-2 scrollbar-thin scrollbar-thumb-slate-200 dark:scrollbar-thumb-slate-800">
+                        {aiContent.chapters.map((ch, idx) => {
+                          const isActive = idx === activeChapterIndex;
+                          return (
+                            <button
+                              key={ch.id || idx}
+                              onClick={() => setActiveChapterIndex(idx)}
+                              className={`px-3 py-2 rounded-xl text-xs font-semibold whitespace-nowrap transition-all flex items-center gap-2 shrink-0 border ${
+                                isActive
+                                  ? 'bg-indigo-600 text-white border-indigo-500 shadow-md shadow-indigo-600/20'
+                                  : 'bg-white dark:bg-slate-900/80 text-slate-700 dark:text-slate-300 border-slate-200 dark:border-slate-800 hover:border-indigo-300 dark:hover:border-indigo-700'
+                              }`}
+                            >
+                              <span className={`w-5 h-5 rounded-full flex items-center justify-center text-[10px] font-bold ${
+                                isActive ? 'bg-white/20 text-white' : 'bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400'
+                              }`}>
+                                {ch.chapterNumber}
+                              </span>
+                              <span>{selectedLanguage === 'hi' ? ch.hindiTitle.split(':')[1] || ch.hindiTitle : ch.title}</span>
+                            </button>
+                          );
+                        })}
+                      </div>
+                    </div>
 
-            {/* Strengths & Challenges Grid */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div className="p-5 rounded-2xl bg-emerald-50/50 dark:bg-emerald-950/20 border border-emerald-100 dark:border-emerald-900/40 space-y-2">
-                <h5 className="text-xs font-bold uppercase tracking-wider text-emerald-800 dark:text-emerald-300 flex items-center gap-1.5">
-                  <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" />
-                  <span>{selectedLanguage === 'hi' ? 'प्रमुख सामर्थ्य' : 'Observed Strengths'}</span>
-                </h5>
-                <ul className="space-y-1.5">
-                  {aiContent.strengths.map((s, i) => (
-                    <li key={i} className="text-xs text-slate-700 dark:text-slate-300 flex items-start gap-2">
-                      <span className="text-emerald-500 font-bold">•</span>
-                      <span>{s}</span>
-                    </li>
-                  ))}
-                </ul>
-              </div>
+                    {/* Active Chapter Container */}
+                    {(() => {
+                      const currentChapter = aiContent.chapters[activeChapterIndex] || aiContent.chapters[0];
+                      return (
+                        <div className="p-6 sm:p-8 rounded-3xl bg-white dark:bg-slate-900/90 border border-slate-200/90 dark:border-slate-800 shadow-lg space-y-6">
+                          {/* Chapter Header */}
+                          <div className="flex flex-wrap items-center justify-between gap-3 pb-4 border-b border-slate-100 dark:border-slate-800">
+                            <div>
+                              <span className="text-[11px] font-bold uppercase tracking-widest text-indigo-600 dark:text-indigo-400">
+                                {selectedLanguage === 'hi' ? `अध्याय ${currentChapter.chapterNumber} / 12` : `Chapter ${currentChapter.chapterNumber} of 12`}
+                              </span>
+                              <h3 className="text-xl sm:text-2xl font-display font-bold text-slate-900 dark:text-slate-100 mt-0.5">
+                                {selectedLanguage === 'hi' ? currentChapter.hindiTitle : currentChapter.title}
+                              </h3>
+                            </div>
+                            <Badge variant="primary" size="sm">
+                              ~{currentChapter.wordCount} {selectedLanguage === 'hi' ? 'शब्द' : 'Words'}
+                            </Badge>
+                          </div>
 
-              <div className="p-5 rounded-2xl bg-purple-50/50 dark:bg-purple-950/20 border border-purple-100 dark:border-purple-900/40 space-y-2">
-                <h5 className="text-xs font-bold uppercase tracking-wider text-purple-800 dark:text-purple-300 flex items-center gap-1.5">
-                  <Sparkles className="w-3.5 h-3.5 text-purple-600 dark:text-purple-400" />
-                  <span>{selectedLanguage === 'hi' ? 'चिंतन बिंदु' : 'Reflection Opportunities'}</span>
-                </h5>
-                <ul className="space-y-1.5">
-                  {aiContent.challenges.map((c, i) => (
-                    <li key={i} className="text-xs text-slate-700 dark:text-slate-300 flex items-start gap-2">
-                      <span className="text-purple-500 font-bold">•</span>
-                      <span>{c}</span>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            </div>
+                          {/* Key Insights Box */}
+                          {currentChapter.keyInsights && currentChapter.keyInsights.length > 0 && (
+                            <div className="p-5 rounded-2xl bg-indigo-50/60 dark:bg-indigo-950/20 border border-indigo-100 dark:border-indigo-900/40 space-y-2.5">
+                              <h4 className="text-xs font-bold uppercase tracking-wider text-indigo-900 dark:text-indigo-300 flex items-center gap-1.5">
+                                <Sparkles className="w-3.5 h-3.5 text-indigo-600 dark:text-indigo-400" />
+                                <span>{selectedLanguage === 'hi' ? 'प्रमुख अंतर्दृष्टि एवं टेकअवे' : 'Core Insights & Takeaways'}</span>
+                              </h4>
+                              <ul className="space-y-1.5">
+                                {currentChapter.keyInsights.map((insight, i) => (
+                                  <li key={i} className="text-xs sm:text-sm text-slate-700 dark:text-slate-300 flex items-start gap-2.5 leading-relaxed">
+                                    <span className="text-indigo-600 dark:text-indigo-400 font-bold mt-0.5">✦</span>
+                                    <span>{insight}</span>
+                                  </li>
+                                ))}
+                              </ul>
+                            </div>
+                          )}
 
-            {/* AI Multi-Pillar Deep Dive Summary */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-              <div className="p-4 rounded-2xl bg-slate-50 dark:bg-slate-900/60 border border-slate-100 dark:border-slate-800 space-y-1.5">
-                <span className="text-xs font-bold text-slate-900 dark:text-slate-100 flex items-center gap-1.5">
-                  <Heart className="w-3.5 h-3.5 text-rose-500" />
-                  <span>{selectedLanguage === 'hi' ? 'संबंध' : 'Relationships'}</span>
-                </span>
-                <p className="text-xs text-slate-600 dark:text-slate-400 leading-relaxed line-clamp-4 hover:line-clamp-none transition-all">
-                  {aiContent.relationships}
-                </p>
-              </div>
+                          {/* Main Chapter Content Body */}
+                          <div className="space-y-4 text-xs sm:text-sm text-slate-700 dark:text-slate-300 leading-relaxed whitespace-pre-line text-justify font-normal">
+                            {currentChapter.content}
+                          </div>
 
-              <div className="p-4 rounded-2xl bg-slate-50 dark:bg-slate-900/60 border border-slate-100 dark:border-slate-800 space-y-1.5">
-                <span className="text-xs font-bold text-slate-900 dark:text-slate-100 flex items-center gap-1.5">
-                  <Briefcase className="w-3.5 h-3.5 text-blue-500" />
-                  <span>{selectedLanguage === 'hi' ? 'कार्यक्षेत्र' : 'Career Dynamic'}</span>
-                </span>
-                <p className="text-xs text-slate-600 dark:text-slate-400 leading-relaxed line-clamp-4 hover:line-clamp-none transition-all">
-                  {aiContent.career}
-                </p>
-              </div>
+                          {/* Actionable Daily Power Ritual */}
+                          {currentChapter.actionableRitual && (
+                            <div className="p-5 rounded-2xl bg-amber-50/60 dark:bg-amber-950/20 border border-amber-200/80 dark:border-amber-900/40 space-y-2">
+                              <h4 className="text-xs font-bold uppercase tracking-wider text-amber-900 dark:text-amber-300 flex items-center gap-1.5">
+                                <Flame className="w-3.5 h-3.5 text-amber-600 dark:text-amber-400" />
+                                <span>{selectedLanguage === 'hi' ? 'दैनिक क्रियात्मक अनुष्ठान (Actionable Power Ritual)' : 'Daily Actionable Power Ritual'}</span>
+                              </h4>
+                              <p className="text-xs sm:text-sm text-amber-950 dark:text-amber-200 leading-relaxed font-medium">
+                                {currentChapter.actionableRitual}
+                              </p>
+                            </div>
+                          )}
 
-              <div className="p-4 rounded-2xl bg-slate-50 dark:bg-slate-900/60 border border-slate-100 dark:border-slate-800 space-y-1.5">
-                <span className="text-xs font-bold text-slate-900 dark:text-slate-100 flex items-center gap-1.5">
-                  <Coins className="w-3.5 h-3.5 text-amber-500" />
-                  <span>{selectedLanguage === 'hi' ? 'वित्तीय दृष्टिकोण' : 'Money Mindset'}</span>
-                </span>
-                <p className="text-xs text-slate-600 dark:text-slate-400 leading-relaxed line-clamp-4 hover:line-clamp-none transition-all">
-                  {aiContent.money}
-                </p>
-              </div>
+                          {/* Prev / Next Chapter Buttons */}
+                          <div className="flex items-center justify-between pt-4 border-t border-slate-100 dark:border-slate-800">
+                            <Button
+                              size="sm"
+                              variant="outline"
+                              disabled={activeChapterIndex === 0}
+                              leftIcon={<ChevronLeft className="w-4 h-4" />}
+                              onClick={() => setActiveChapterIndex((prev) => Math.max(0, prev - 1))}
+                            >
+                              {selectedLanguage === 'hi' ? 'पिछला अध्याय' : 'Previous Chapter'}
+                            </Button>
+                            <span className="text-xs font-mono text-slate-500 dark:text-slate-400">
+                              {activeChapterIndex + 1} / {aiContent.chapters.length}
+                            </span>
+                            <Button
+                              size="sm"
+                              variant="primary"
+                              disabled={activeChapterIndex === aiContent.chapters.length - 1}
+                              rightIcon={<ChevronRight className="w-4 h-4" />}
+                              onClick={() => setActiveChapterIndex((prev) => Math.min(aiContent.chapters!.length - 1, prev + 1))}
+                            >
+                              {selectedLanguage === 'hi' ? 'अगला अध्याय' : 'Next Chapter'}
+                            </Button>
+                          </div>
+                        </div>
+                      );
+                    })()}
+                  </div>
+                )}
 
-              <div className="p-4 rounded-2xl bg-slate-50 dark:bg-slate-900/60 border border-slate-100 dark:border-slate-800 space-y-1.5">
-                <span className="text-xs font-bold text-slate-900 dark:text-slate-100 flex items-center gap-1.5">
-                  <MessageSquare className="w-3.5 h-3.5 text-emerald-500" />
-                  <span>{selectedLanguage === 'hi' ? 'संवाद शैली' : 'Communication'}</span>
-                </span>
-                <p className="text-xs text-slate-600 dark:text-slate-400 leading-relaxed line-clamp-4 hover:line-clamp-none transition-all">
-                  {aiContent.communication}
-                </p>
-              </div>
+                {/* Mode 2: Continuous Complete Master Reading / Print View */}
+                <div className={`space-y-8 ${readerViewMode === 'chapters' ? 'hidden print:block' : 'block'}`}>
+                  {aiContent.chapters.map((ch, idx) => (
+                      <div
+                        key={ch.id || idx}
+                        className="p-6 sm:p-8 rounded-3xl bg-white dark:bg-slate-900/90 border border-slate-200/90 dark:border-slate-800 shadow-sm space-y-6 print:p-0 print:border-none print:shadow-none print:break-before-page"
+                        style={{ pageBreakBefore: idx > 0 ? 'always' : 'auto' }}
+                      >
+                        <div className="flex flex-wrap items-center justify-between gap-2 pb-4 border-b border-slate-100 dark:border-slate-800">
+                          <div>
+                            <span className="text-[11px] font-bold uppercase tracking-widest text-indigo-600 dark:text-indigo-400">
+                              {selectedLanguage === 'hi' ? `अध्याय ${ch.chapterNumber} / 12` : `Chapter ${ch.chapterNumber} of 12`}
+                            </span>
+                            <h3 className="text-xl sm:text-2xl font-display font-bold text-slate-900 dark:text-slate-100">
+                              {selectedLanguage === 'hi' ? ch.hindiTitle : ch.title}
+                            </h3>
+                          </div>
+                          <Badge variant="primary" size="sm">
+                            ~{ch.wordCount} {selectedLanguage === 'hi' ? 'शब्द' : 'Words'}
+                          </Badge>
+                        </div>
 
-              <div className="p-4 rounded-2xl bg-slate-50 dark:bg-slate-900/60 border border-slate-100 dark:border-slate-800 space-y-1.5">
-                <span className="text-xs font-bold text-slate-900 dark:text-slate-100 flex items-center gap-1.5">
-                  <BookOpen className="w-3.5 h-3.5 text-purple-500" />
-                  <span>{selectedLanguage === 'hi' ? 'सीखने की शैली' : 'Learning Style'}</span>
-                </span>
-                <p className="text-xs text-slate-600 dark:text-slate-400 leading-relaxed line-clamp-4 hover:line-clamp-none transition-all">
-                  {aiContent.learning}
-                </p>
-              </div>
+                        {ch.keyInsights && ch.keyInsights.length > 0 && (
+                          <div className="p-4 rounded-2xl bg-indigo-50/60 dark:bg-indigo-950/20 border border-indigo-100 dark:border-indigo-900/40 space-y-2">
+                            <h4 className="text-xs font-bold uppercase tracking-wider text-indigo-900 dark:text-indigo-300 flex items-center gap-1.5">
+                              <Sparkles className="w-3.5 h-3.5 text-indigo-600 dark:text-indigo-400" />
+                              <span>{selectedLanguage === 'hi' ? 'प्रमुख अंतर्दृष्टि' : 'Key Insights'}</span>
+                            </h4>
+                            <ul className="space-y-1">
+                              {ch.keyInsights.map((insight, i) => (
+                                <li key={i} className="text-xs text-slate-700 dark:text-slate-300 flex items-start gap-2">
+                                  <span className="text-indigo-600 dark:text-indigo-400 font-bold">•</span>
+                                  <span>{insight}</span>
+                                </li>
+                              ))}
+                            </ul>
+                          </div>
+                        )}
 
-              <div className="p-4 rounded-2xl bg-slate-50 dark:bg-slate-900/60 border border-slate-100 dark:border-slate-800 space-y-1.5">
-                <span className="text-xs font-bold text-slate-900 dark:text-slate-100 flex items-center gap-1.5">
-                  <TrendingUp className="w-3.5 h-3.5 text-indigo-500" />
-                  <span>{selectedLanguage === 'hi' ? 'व्यक्तिगत विकास' : 'Personal Growth'}</span>
-                </span>
-                <p className="text-xs text-slate-600 dark:text-slate-400 leading-relaxed line-clamp-4 hover:line-clamp-none transition-all">
-                  {aiContent.growth}
-                </p>
+                        <div className="space-y-3 text-xs sm:text-sm text-slate-700 dark:text-slate-300 leading-relaxed whitespace-pre-line text-justify">
+                          {ch.content}
+                        </div>
+
+                        {ch.actionableRitual && (
+                          <div className="p-4 rounded-2xl bg-amber-50/60 dark:bg-amber-950/20 border border-amber-200/80 dark:border-amber-900/40 space-y-1.5">
+                            <h4 className="text-xs font-bold uppercase tracking-wider text-amber-900 dark:text-amber-300 flex items-center gap-1.5">
+                              <Flame className="w-3.5 h-3.5 text-amber-600 dark:text-amber-400" />
+                              <span>{selectedLanguage === 'hi' ? 'दैनिक क्रियात्मक अनुष्ठान' : 'Daily Power Ritual'}</span>
+                            </h4>
+                            <p className="text-xs text-amber-950 dark:text-amber-200 leading-relaxed font-medium">
+                              {ch.actionableRitual}
+                            </p>
+                          </div>
+                        )}
+                      </div>
+                    ))}
+                  </div>
               </div>
-            </div>
+            ) : (
+              /* Fallback for legacy cached reports without chapters array */
+              <div className="space-y-6">
+                <div className="space-y-3">
+                  <h4 className="text-base sm:text-lg font-display font-bold text-slate-900 dark:text-slate-100">
+                    {aiContent.title}
+                  </h4>
+                  <p className="text-xs sm:text-sm text-slate-700 dark:text-slate-300 leading-relaxed whitespace-pre-line bg-white dark:bg-slate-900/80 p-6 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm">
+                    {aiContent.story}
+                  </p>
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div className="p-5 rounded-2xl bg-emerald-50/50 dark:bg-emerald-950/20 border border-emerald-100 dark:border-emerald-900/40 space-y-2">
+                    <h5 className="text-xs font-bold uppercase tracking-wider text-emerald-800 dark:text-emerald-300 flex items-center gap-1.5">
+                      <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" />
+                      <span>{selectedLanguage === 'hi' ? 'प्रमुख सामर्थ्य' : 'Observed Strengths'}</span>
+                    </h5>
+                    <ul className="space-y-1.5">
+                      {aiContent.strengths.map((s, i) => (
+                        <li key={i} className="text-xs text-slate-700 dark:text-slate-300 flex items-start gap-2">
+                          <span className="text-emerald-500 font-bold">•</span>
+                          <span>{s}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+
+                  <div className="p-5 rounded-2xl bg-purple-50/50 dark:bg-purple-950/20 border border-purple-100 dark:border-purple-900/40 space-y-2">
+                    <h5 className="text-xs font-bold uppercase tracking-wider text-purple-800 dark:text-purple-300 flex items-center gap-1.5">
+                      <Sparkles className="w-3.5 h-3.5 text-purple-600 dark:text-purple-400" />
+                      <span>{selectedLanguage === 'hi' ? 'चिंतन बिंदु' : 'Reflection Opportunities'}</span>
+                    </h5>
+                    <ul className="space-y-1.5">
+                      {aiContent.challenges.map((c, i) => (
+                        <li key={i} className="text-xs text-slate-700 dark:text-slate-300 flex items-start gap-2">
+                          <span className="text-purple-500 font-bold">•</span>
+                          <span>{c}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                </div>
+              </div>
+            )}
           </div>
         )}
 
         {/* Empty CTA State */}
         {aiStatus === 'idle' && (
-          <div className="py-6 text-center space-y-3 bg-white dark:bg-slate-900/60 p-6 rounded-2xl border border-slate-100 dark:border-slate-800">
-            <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-300 max-w-md mx-auto">
-              {selectedLanguage === 'hi'
-                ? 'अपनी संख्या आवृत्ति और व्यक्तित्व आयामों को जोड़कर एक संपूर्ण व्यक्तिगत कहानी उत्पन्न करें।'
-                : 'Generate a rich, multi-page personalized narrative that synthesizes your numeric rhythms and personality dimensions into an engaging story.'}
-            </p>
+          <div className="py-8 text-center space-y-4 bg-white dark:bg-slate-900/60 p-6 sm:p-10 rounded-3xl border border-slate-100 dark:border-slate-800 shadow-inner">
+            <div className="w-12 h-12 rounded-2xl bg-indigo-50 dark:bg-indigo-950/50 text-indigo-600 dark:text-indigo-400 flex items-center justify-center mx-auto shadow-sm">
+              <Compass className="w-6 h-6" />
+            </div>
+            <div className="space-y-1.5 max-w-lg mx-auto">
+              <h3 className="font-display font-bold text-slate-950 dark:text-slate-50 text-base sm:text-lg">
+                {selectedLanguage === 'hi'
+                  ? 'अपना 5,000+ शब्दों का विस्तृत 12-अध्याय महा-दस्तावेज़ खोलें'
+                  : 'Unlock Your 5,000+ Words 12-Chapter Master Dossier'}
+              </h3>
+              <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-400 leading-relaxed">
+                {selectedLanguage === 'hi'
+                  ? 'अंक विज्ञान और संज्ञानात्मक मनोविज्ञान के 40/60 मिश्रण से तैयार संपूर्ण 12-अध्याय जीवन खाका, दैनिक अनुष्ठान और 90-दिवसीय ट्रांसफॉर्मेशन ब्लूप्रिंट।'
+                  : 'An exhaustive 12-chapter publication-grade synthesis featuring life pillars, archetype DNA, daily power rituals, and a 90-day transformation blueprint.'}
+              </p>
+            </div>
             <Button
-              size="md"
+              size="lg"
               variant="primary"
-              leftIcon={<Flame className="w-4 h-4 text-amber-300" />}
+              leftIcon={<Flame className="w-5 h-5 text-amber-300" />}
               onClick={handleGenerateAIReport}
             >
               {selectedLanguage === 'hi'
-                ? 'मेरी व्यक्तिगत कहानी बनाएं'
-                : 'Generate My Personalized Story'}
+                ? '5,000+ शब्दों का महा-दस्तावेज़ उत्पन्न करें'
+                : 'Generate 5,000+ Words Master Dossier'}
             </Button>
           </div>
         )}

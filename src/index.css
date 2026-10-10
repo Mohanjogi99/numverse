@@ -113,3 +113,40 @@
   animation: fadeIn 0.3s ease-out forwards;
 }
 
+/* Publication-Grade PDF & Print Styling */
+@media print {
+  @page {
+    size: A4 portrait;
+    margin: 15mm 18mm;
+  }
+
+  body {
+    background: #ffffff !important;
+    color: #0f172a !important;
+    font-size: 11pt !important;
+    line-height: 1.6 !important;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+
+  header, footer, nav, button, .no-print, [role="navigation"] {
+    display: none !important;
+  }
+
+  .print\\:break-before-page {
+    page-break-before: always !important;
+    break-before: page !important;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    color: #0f172a !important;
+    page-break-after: avoid !important;
+    break-after: avoid !important;
+  }
+
+  p, li {
+    orphans: 3;
+    widows: 3;
+  }
+}
+

@@ -15,6 +15,17 @@ export type AIErrorCategory =
   | 'STORAGE_ERROR'
   | 'UNKNOWN_ERROR';
 
+export interface ReportChapter {
+  id: string;
+  chapterNumber: number;
+  title: string;
+  hindiTitle: string;
+  wordCount: number;
+  content: string;
+  keyInsights: string[];
+  actionableRitual?: string;
+}
+
 export interface StructuredAIReportContent {
   title: string;
   signatureSentence: string;
@@ -28,6 +39,22 @@ export interface StructuredAIReportContent {
   learning: string;
   growth: string;
   story: string;
+
+  // 5,000+ Words 12-Chapter Deep Dossier Extensions
+  totalWordCount?: number;
+  chapters?: ReportChapter[];
+  coreIdentityChapter?: string;
+  archetypeDnaChapter?: string;
+  subconsciousFusionChapter?: string;
+  loveChapter?: string;
+  careerChapter?: string;
+  moneyChapter?: string;
+  communicationChapter?: string;
+  learningChapter?: string;
+  growthChapter?: string;
+  tensionMatrixChapter?: string;
+  biographicalEpicStory?: string;
+  actionBlueprintChapter?: string;
 }
 
 export interface StructuredFusionInput {
