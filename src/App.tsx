@@ -15,6 +15,11 @@ import { NumberDetailPage } from './pages/NumberDetailPage';
 import { PersonalityTypesPage } from './pages/PersonalityTypesPage';
 import { PersonalityTypeDetailPage } from './pages/PersonalityTypeDetailPage';
 import { AboutPage } from './pages/AboutPage';
+import { PrivacyPolicyPage } from './pages/PrivacyPolicyPage';
+import { TermsPage } from './pages/TermsPage';
+import { RefundPolicyPage } from './pages/RefundPolicyPage';
+import { ContactPage } from './pages/ContactPage';
+import { DisclaimerPage } from './pages/DisclaimerPage';
 import { DashboardPage } from './pages/DashboardPage';
 import { SettingsPage } from './pages/SettingsPage';
 import { CheckoutPage } from './pages/CheckoutPage';
@@ -45,6 +50,11 @@ export const App: React.FC = () => {
           <Route path={ROUTES.DASHBOARD} element={<DashboardPage />} />
           <Route path={ROUTES.SETTINGS} element={<SettingsPage />} />
           <Route path={ROUTES.ABOUT} element={<AboutPage />} />
+          <Route path={ROUTES.PRIVACY} element={<PrivacyPolicyPage />} />
+          <Route path={ROUTES.TERMS} element={<TermsPage />} />
+          <Route path={ROUTES.REFUND} element={<RefundPolicyPage />} />
+          <Route path={ROUTES.CONTACT} element={<ContactPage />} />
+          <Route path={ROUTES.DISCLAIMER} element={<DisclaimerPage />} />
           <Route path={ROUTES.PERSONALITY_TYPES} element={<PersonalityTypesPage />} />
           <Route path={ROUTES.PERSONALITY_TYPE_DETAIL} element={<PersonalityTypeDetailPage />} />
           <Route path={ROUTES.NUMBER_DETAIL} element={<NumberDetailPage />} />
