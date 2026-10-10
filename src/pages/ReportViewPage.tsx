@@ -52,7 +52,7 @@ export const ReportViewPage: React.FC = () => {
   const [searchParams] = useSearchParams();
   const isLockedPreview = searchParams.get('locked') === 'true';
   const { showToast } = useToast();
-  const { language, setLanguage, t } = useLanguage();
+  const { language, setLanguage, t, isHindi } = useLanguage();
 
   const [fusion, setFusion] = useState<FusionAnalysisResult | null>(null);
   const [isLoading, setIsLoading] = useState(true);
