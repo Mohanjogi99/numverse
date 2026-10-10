@@ -600,10 +600,10 @@ export const ReportViewPage: React.FC = () => {
       <div className="space-y-4">
         <div>
           <h2 className="text-xl sm:text-2xl font-display font-bold text-slate-900 dark:text-slate-100">
-            {t.report.pillarsTitle}
+            {isHindi ? '6 जीवन स्तंभ विश्लेषण' : t.report.pillarsTitle}
           </h2>
           <p className="text-xs sm:text-sm text-slate-500 dark:text-slate-400">
-            {t.report.pillarsDesc}
+            {isHindi ? 'आपके संख्या पैटर्न और व्यक्तित्व का 6 मुख्य जीवन क्षेत्रों में गहरा प्रभाव।' : t.report.pillarsDesc}
           </p>
         </div>
 
@@ -612,6 +612,14 @@ export const ReportViewPage: React.FC = () => {
           {(['love', 'career', 'money', 'communication', 'learning', 'growth'] as PillarKey[]).map((key) => {
             const p = fusion.pillars[key];
             const isActive = activePillar === key;
+            const pillarHindiLabels: Record<PillarKey, string> = {
+              love: 'प्रेम एवं संबंध',
+              career: 'करियर एवं नेतृत्व',
+              money: 'धन एवं वित्तीय',
+              communication: 'संवाद शैली',
+              learning: 'सीखने की शैली',
+              growth: 'व्यक्तिगत विकास',
+            };
             return (
               <button
                 key={key}
@@ -631,8 +639,8 @@ export const ReportViewPage: React.FC = () => {
                   </span>
                 </div>
                 <div>
-                  <span className={`block text-xs font-bold capitalize ${isActive ? 'text-white' : 'text-slate-800 dark:text-slate-200'}`}>
-                    {key}
+                  <span className={`block text-xs font-bold ${isActive ? 'text-white' : 'text-slate-800 dark:text-slate-200'}`}>
+                    {isHindi ? pillarHindiLabels[key] : key.toUpperCase()}
                   </span>
                   <span className={`block text-[10px] ${isActive ? 'text-indigo-200' : 'text-slate-400 dark:text-slate-500'}`}>
                     {p.scoreBand.label}
@@ -652,7 +660,7 @@ export const ReportViewPage: React.FC = () => {
               </div>
               <div>
                 <span className="text-xs font-bold uppercase tracking-wider text-indigo-600 dark:text-indigo-400">
-                  Pillar Analysis
+                  {isHindi ? 'स्तंभ विश्लेषण' : 'Pillar Analysis'}
                 </span>
                 <h3 className="text-xl sm:text-2xl font-display font-bold text-slate-900 dark:text-slate-100">
                   {currentPillar.title}
@@ -688,7 +696,7 @@ export const ReportViewPage: React.FC = () => {
             <div className="p-4 rounded-2xl bg-emerald-50/50 dark:bg-emerald-950/20 border border-emerald-100 dark:border-emerald-900/40 space-y-2">
               <h5 className="text-xs font-bold uppercase tracking-wider text-emerald-800 dark:text-emerald-300 flex items-center gap-1.5">
                 <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" />
-                <span>Observed Strengths</span>
+                <span>{isHindi ? 'पहचानी गई मुख्य शक्तियाँ' : 'Observed Strengths'}</span>
               </h5>
               <ul className="space-y-1.5">
                 {currentPillar.strengths.map((s, i) => (
@@ -703,7 +711,7 @@ export const ReportViewPage: React.FC = () => {
             <div className="p-4 rounded-2xl bg-indigo-50/50 dark:bg-indigo-950/20 border border-indigo-100 dark:border-indigo-900/40 space-y-2">
               <h5 className="text-xs font-bold uppercase tracking-wider text-indigo-800 dark:text-indigo-300 flex items-center gap-1.5">
                 <Sparkles className="w-3.5 h-3.5 text-indigo-600 dark:text-indigo-400" />
-                <span>Development Recommendations</span>
+                <span>{isHindi ? 'विकास एवं सुधार के सुझाव' : 'Development Recommendations'}</span>
               </h5>
               <ul className="space-y-1.5">
                 {currentPillar.growthAdvice.map((g, i) => (
@@ -719,7 +727,7 @@ export const ReportViewPage: React.FC = () => {
           {/* Reflection Prompt */}
           <div className="p-4 rounded-2xl bg-purple-50/50 dark:bg-purple-950/20 border border-purple-100/70 dark:border-purple-900/40 space-y-1">
             <span className="text-[11px] font-bold uppercase tracking-wider text-purple-700 dark:text-purple-300">
-              Self-Reflection Ingestion
+              {isHindi ? 'आत्म-चिंतन एवं विचार बिंदु' : 'Self-Reflection Ingestion'}
             </span>
             <p className="text-xs sm:text-sm text-slate-700 dark:text-slate-300 italic">
               "{currentPillar.reflectionPrompt}"
@@ -733,13 +741,15 @@ export const ReportViewPage: React.FC = () => {
       <Card className="p-6 sm:p-8 space-y-6">
         <div>
           <span className="text-xs font-bold uppercase tracking-wider text-indigo-600 dark:text-indigo-400">
-            Psychological Spectrum
+            {isHindi ? 'मनोवैज्ञानिक स्पेक्ट्रम' : 'Psychological Spectrum'}
           </span>
           <h2 className="text-xl font-display font-bold text-slate-900 dark:text-slate-100 mt-1">
-            Fused 6-Dimension Scoreboard
+            {isHindi ? 'संयुक्त 6-आयाम स्कोरकार्ड' : 'Fused 6-Dimension Scoreboard'}
           </h2>
           <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
-            Calculated via exact formula: (40% Number Frequency) + (60% Assessment Score)
+            {isHindi
+              ? 'सटीक सूत्र द्वारा गणना: (40% संख्या आवृत्ति) + (60% व्यक्तित्व मूल्यांकन)'
+              : 'Calculated via exact formula: (40% Number Frequency) + (60% Assessment Score)'}
           </p>
         </div>
 
@@ -757,16 +767,24 @@ export const ReportViewPage: React.FC = () => {
             const score = fusion.fusedDimensionScores[dim];
             const numScore = fusion.numberResult.dimensionScores[dim];
             const persScore = fusion.personalityResult.dimensionScores[dim];
+            const dimHindiNames: Record<string, string> = {
+              curiosity: 'जिज्ञासा एवं खोज (Curiosity)',
+              independence: 'स्वतंत्रता एवं स्वायत्तता (Independence)',
+              leadership: 'नेतृत्व एवं प्रभाव (Leadership)',
+              social: 'सामाजिक सामंजस्य (Social)',
+              emotional: 'भावनात्मक गहराई (Emotional)',
+              stability: 'स्थिरता एवं अनुशासन (Stability)',
+            };
             return (
               <div key={dim} className="space-y-2 p-3 rounded-xl bg-slate-50 dark:bg-slate-900/60 border border-slate-100 dark:border-slate-800">
                 <div className="flex items-center justify-between text-xs">
-                  <span className="font-bold capitalize text-slate-800 dark:text-slate-200">{dim}</span>
+                  <span className="font-bold text-slate-800 dark:text-slate-200">{isHindi ? dimHindiNames[dim] : dim.toUpperCase()}</span>
                   <span className="font-mono font-bold text-indigo-700 dark:text-indigo-400">{score}/100</span>
                 </div>
                 <ProgressBar value={score} max={100} variant="primary" size="md" />
                 <div className="flex items-center justify-between text-[10px] text-slate-500 dark:text-slate-400 font-mono">
-                  <span>Number: {numScore} (×0.40)</span>
-                  <span>Personality: {persScore} (×0.60)</span>
+                  <span>{isHindi ? 'संख्या प्रभाव:' : 'Number:'} {numScore} (×0.40)</span>
+                  <span>{isHindi ? 'व्यक्तित्व स्कोर:' : 'Personality:'} {persScore} (×0.60)</span>
                 </div>
               </div>
             );
@@ -779,16 +797,18 @@ export const ReportViewPage: React.FC = () => {
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
           <div>
             <h2 className="text-xl font-display font-bold text-slate-900 dark:text-slate-100">
-              Dimension Alignments & Dynamic Tensions
+              {isHindi ? 'आयाम तालमेल एवं रचनात्मक संतुलन' : 'Dimension Alignments & Dynamic Tensions'}
             </h2>
             <p className="text-xs text-slate-500 dark:text-slate-400">
-              Comparing latent numerical rhythms against conscious assessment choices.
+              {isHindi
+                ? 'अंतर्निहित संख्या लय और चेतन व्यक्तित्व प्राथमिकताओं की तुलना।'
+                : 'Comparing latent numerical rhythms against conscious assessment choices.'}
             </p>
           </div>
-          <div className="flex items-center gap-2 text-[11px] font-medium">
-            <span className="px-2 py-0.5 rounded bg-emerald-50 dark:bg-emerald-950/40 text-emerald-700 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800/60">Harmonic (Δ ≤ 15)</span>
-            <span className="px-2 py-0.5 rounded bg-blue-50 dark:bg-blue-950/40 text-blue-700 dark:text-blue-300 border border-blue-200 dark:border-blue-800/60">Complementary (15 &lt; Δ ≤ 35)</span>
-            <span className="px-2 py-0.5 rounded bg-amber-50 dark:bg-amber-950/40 text-amber-700 dark:text-amber-300 border border-amber-200 dark:border-amber-800/60">Tension (Δ &gt; 35)</span>
+          <div className="flex flex-wrap items-center gap-2 text-[11px] font-medium">
+            <span className="px-2 py-0.5 rounded bg-emerald-50 dark:bg-emerald-950/40 text-emerald-700 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800/60">{isHindi ? 'सुसंगत (Δ ≤ 15)' : 'Harmonic (Δ ≤ 15)'}</span>
+            <span className="px-2 py-0.5 rounded bg-blue-50 dark:bg-blue-950/40 text-blue-700 dark:text-blue-300 border border-blue-200 dark:border-blue-800/60">{isHindi ? 'पूरक (15 < Δ ≤ 35)' : 'Complementary (15 < Δ ≤ 35)'}</span>
+            <span className="px-2 py-0.5 rounded bg-amber-50 dark:bg-amber-950/40 text-amber-700 dark:text-amber-300 border border-amber-200 dark:border-amber-800/60">{isHindi ? 'सक्रिय तनाव (Δ > 35)' : 'Tension (Δ > 35)'}</span>
           </div>
         </div>
 
@@ -812,14 +832,20 @@ export const ReportViewPage: React.FC = () => {
                   }
                   size="sm"
                 >
-                  {align.status} (Δ {align.delta} pts)
+                  {isHindi
+                    ? align.status === 'harmonic'
+                      ? `सुसंगत (Δ ${align.delta} pts)`
+                      : align.status === 'complementary'
+                      ? `पूरक (Δ ${align.delta} pts)`
+                      : `सक्रिय तनाव (Δ ${align.delta} pts)`
+                    : `${align.status} (Δ ${align.delta} pts)`}
                 </Badge>
               </div>
               <p className="text-xs text-slate-600 dark:text-slate-300 leading-relaxed">{align.insight}</p>
               <div className="flex items-center gap-4 text-xs font-mono text-slate-400 dark:text-slate-500 pt-1 border-t border-slate-100 dark:border-slate-800">
-                <span>Number Frequency: {align.numberScore}</span>
+                <span>{isHindi ? 'संख्या आवृत्ति:' : 'Number Frequency:'} {align.numberScore}</span>
                 <span>•</span>
-                <span>Self-Assessment: {align.personalityScore}</span>
+                <span>{isHindi ? 'स्व-मूल्यांकन:' : 'Self-Assessment:'} {align.personalityScore}</span>
               </div>
             </div>
           ))}
@@ -831,12 +857,14 @@ export const ReportViewPage: React.FC = () => {
         <div className="flex flex-wrap items-center justify-between gap-2 font-mono text-[11px]">
           <span className="flex items-center gap-1.5 text-slate-700 dark:text-slate-300 font-semibold">
             <ShieldCheck className="w-4 h-4 text-emerald-600 dark:text-emerald-400" />
-            <span>Deterministic Snapshot #{fusion.snapshot.snapshotId}</span>
+            <span>{isHindi ? 'सत्यापित स्नैपशॉट' : 'Deterministic Snapshot'} #{fusion.snapshot.snapshotId}</span>
           </span>
-          <span>Calculated: {new Date(fusion.calculatedAt).toLocaleString()}</span>
+          <span>{isHindi ? 'गणना समय:' : 'Calculated:'} {new Date(fusion.calculatedAt).toLocaleString()}</span>
         </div>
         <p className="text-[11px] leading-relaxed text-slate-500 dark:text-slate-400">
-          Some narrative sections of this report are generated with AI from your Number Story profile. Core numbers, scoring formulas, and dimension metrics are computed deterministically without probabilistic modifications.
+          {isHindi
+            ? 'इस रिपोर्ट के कुछ व्यक्तिगत आख्यान खंड आपके Numverse प्रोफाइल के आधार पर AI द्वारा तैयार किए गए हैं। मुख्य अंक, स्कोरिंग सूत्र और 6 आयाम मीट्रिक्स गणितीय रूप से अपरिवर्तनीय हैं।'
+            : 'Some narrative sections of this report are generated with AI from your Number Story profile. Core numbers, scoring formulas, and dimension metrics are computed deterministically without probabilistic modifications.'}
         </p>
       </Card>
 

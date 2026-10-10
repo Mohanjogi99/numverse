@@ -4,11 +4,16 @@ import { AlertCircle, RefreshCw, ArrowLeft } from 'lucide-react';
 import { Card } from '../components/ui/Card';
 import { Button } from '../components/ui/Button';
 import { ROUTES } from '../config/routes';
+import { useLanguage } from '../context/LanguageContext';
 
 export const PaymentFailedPage: React.FC = () => {
   const [searchParams] = useSearchParams();
+  const { isHindi } = useLanguage();
   const productId = searchParams.get('productId') || 'combo';
-  const errorMessage = searchParams.get('error') || 'The transaction was cancelled or declined by your bank.';
+  const defaultError = isHindi
+    ? 'लेन-देन रद्द कर दिया गया या आपके बैंक द्वारा अस्वीकार कर दिया गया।'
+    : 'The transaction was cancelled or declined by your bank.';
+  const errorMessage = searchParams.get('error') || defaultError;
 
   return (
     <div className="max-w-md mx-auto px-4 py-16 text-center space-y-6 animate-fade-in">
@@ -19,7 +24,7 @@ export const PaymentFailedPage: React.FC = () => {
 
         <div className="space-y-2">
           <h1 className="text-2xl sm:text-3xl font-display font-extrabold text-slate-900">
-            Payment Incomplete
+            {isHindi ? 'भुगतान अधूरा रहा' : 'Payment Incomplete'}
           </h1>
           <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">
             {errorMessage}
@@ -27,18 +32,22 @@ export const PaymentFailedPage: React.FC = () => {
         </div>
 
         <div className="p-4 rounded-2xl bg-slate-50 border border-slate-100 text-xs text-slate-600">
-          <p>No amount was deducted from your account. You can retry checkout anytime with another payment method.</p>
+          <p>
+            {isHindi
+              ? 'आपके खाते से कोई राशि नहीं काटी गई है। आप किसी अन्य भुगतान विधि से कभी भी पुनः प्रयास कर सकते हैं।'
+              : 'No amount was deducted from your account. You can retry checkout anytime with another payment method.'}
+          </p>
         </div>
 
         <div className="pt-2 flex flex-col sm:flex-row gap-3">
           <Link to={`/checkout/${productId}`} className="w-full">
             <Button size="md" variant="primary" className="w-full" leftIcon={<RefreshCw className="w-4 h-4" />}>
-              Try Again
+              {isHindi ? 'पुनः प्रयास करें' : 'Try Again'}
             </Button>
           </Link>
           <Link to={ROUTES.DASHBOARD} className="w-full">
             <Button size="md" variant="outline" className="w-full" leftIcon={<ArrowLeft className="w-4 h-4" />}>
-              Workspace
+              {isHindi ? 'वर्कस्पेस' : 'Workspace'}
             </Button>
           </Link>
         </div>

@@ -6,22 +6,29 @@ import { Card } from '../components/ui/Card';
 import { Button } from '../components/ui/Button';
 import { DisclaimerBanner } from '../components/common/DisclaimerBanner';
 import { ROUTES } from '../config/routes';
+import { useLanguage } from '../context/LanguageContext';
+import { getLocalizedPersonalityArchetype } from '../i18n/profileHelpers';
 
 export const PersonalityTypesPage: React.FC = () => {
-  const archetypes = Object.values(PERSONALITY_ARCHETYPES);
+  const { language, isHindi } = useLanguage();
+  const archetypes = Object.keys(PERSONALITY_ARCHETYPES).map((id) =>
+    getLocalizedPersonalityArchetype(id, language)
+  );
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-16 space-y-12 animate-fade-in">
       <div className="text-center space-y-3 max-w-3xl mx-auto">
-        <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-purple-50 text-purple-700 text-xs font-semibold">
+        <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-purple-50 dark:bg-purple-950/60 text-purple-700 dark:text-purple-300 text-xs font-semibold border border-purple-200 dark:border-purple-900/40">
           <Sparkles className="w-3.5 h-3.5" />
-          <span>Archetype Index</span>
+          <span>{isHindi ? 'व्यक्तित्व सूचकांक' : 'Archetype Index'}</span>
         </div>
-        <h1 className="text-3xl sm:text-4xl lg:text-5xl font-display font-extrabold text-slate-900 tracking-tight">
-          The 10 Personality Types
+        <h1 className="text-3xl sm:text-4xl lg:text-5xl font-display font-extrabold text-slate-900 dark:text-white tracking-tight">
+          {isHindi ? '10 प्रमुख व्यक्तित्व प्रकार' : 'The 10 Personality Types'}
         </h1>
-        <p className="text-sm sm:text-base text-slate-600">
-          Discover the distinct psychological patterns and behavioral archetypes evaluated by the Number Story assessment engine.
+        <p className="text-sm sm:text-base text-slate-600 dark:text-slate-400">
+          {isHindi
+            ? 'Numverse मूल्यांकन इंजन द्वारा विश्लेषण किए जाने वाले 10 विशिष्ट मनोवैज्ञानिक पैटर्न और व्यवहारिक आर्केटाइप का अन्वेषण करें।'
+            : 'Discover the distinct psychological patterns and behavioral archetypes evaluated by the Numverse assessment engine.'}
         </p>
       </div>
 
@@ -31,27 +38,27 @@ export const PersonalityTypesPage: React.FC = () => {
           <Link key={arch.id} to={`/personality-types/${arch.id}`} className="block group">
             <Card
               variant="interactive"
-              className="p-5 h-full flex flex-col justify-between border-slate-200 hover:border-purple-300 transition-all space-y-4"
+              className="p-5 h-full flex flex-col justify-between border-slate-200 dark:border-slate-800 hover:border-purple-300 dark:hover:border-purple-600 transition-all space-y-4"
             >
               <div className="space-y-3">
                 <div className="flex items-center justify-between">
-                  <span className="text-[10px] font-bold uppercase tracking-wider text-purple-700 bg-purple-50 px-2 py-0.5 rounded-md">
+                  <span className="text-[10px] font-bold uppercase tracking-wider text-purple-700 dark:text-purple-300 bg-purple-50 dark:bg-purple-950/60 px-2 py-0.5 rounded-md">
                     {arch.code}
                   </span>
-                  <span className="text-xs font-medium text-slate-400">{arch.subtitle}</span>
+                  <span className="text-xs font-medium text-slate-400 dark:text-slate-500">{arch.subtitle}</span>
                 </div>
 
-                <h3 className="text-base sm:text-lg font-display font-bold text-slate-900 group-hover:text-indigo-600 transition-colors">
+                <h3 className="text-base sm:text-lg font-display font-bold text-slate-900 dark:text-white group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors">
                   {arch.title}
                 </h3>
 
-                <p className="text-xs text-slate-600 line-clamp-3 leading-relaxed">
+                <p className="text-xs text-slate-600 dark:text-slate-400 line-clamp-3 leading-relaxed">
                   {arch.tagline}
                 </p>
               </div>
 
-              <div className="pt-3 border-t border-slate-100 flex items-center justify-between text-xs font-semibold text-indigo-600 group-hover:text-indigo-800">
-                <span>Explore Profile</span>
+              <div className="pt-3 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between text-xs font-semibold text-indigo-600 dark:text-indigo-400 group-hover:text-indigo-800 dark:group-hover:text-indigo-300">
+                <span>{isHindi ? 'प्रोफ़ाइल देखें' : 'Explore Profile'}</span>
                 <ChevronRight className="w-4 h-4 group-hover:translate-x-0.5 transition-transform" />
               </div>
             </Card>
@@ -61,14 +68,18 @@ export const PersonalityTypesPage: React.FC = () => {
 
       {/* Take Assessment CTA */}
       <div className="bg-gradient-to-r from-indigo-900 via-purple-950 to-indigo-900 rounded-3xl p-8 sm:p-12 text-white text-center space-y-4 shadow-xl">
-        <h2 className="text-2xl sm:text-3xl font-display font-bold">Discover Which Archetype Resonates With You</h2>
+        <h2 className="text-2xl sm:text-3xl font-display font-bold">
+          {isHindi ? 'जानें कि कौन सा व्यक्तित्व प्रकार आपके सबसे करीब है' : 'Discover Which Archetype Resonates With You'}
+        </h2>
         <p className="text-purple-200 text-xs sm:text-sm max-w-xl mx-auto leading-relaxed">
-          Take our structured assessment to map your traits across 6 key dimensions and discover your primary & secondary archetypes.
+          {isHindi
+            ? '6 प्रमुख आयामों पर अपने गुणों को मैप करने और अपने प्राथमिक व सहायक प्रकार को जानने के लिए हमारा संरचित मूल्यांकन दें।'
+            : 'Take our structured assessment to map your traits across 6 key dimensions and discover your primary & secondary archetypes.'}
         </p>
         <div className="pt-2">
           <Link to={ROUTES.PERSONALITY_TEST}>
             <Button variant="gold" size="lg" rightIcon={<ArrowRight className="w-4 h-4" />}>
-              Start Personality Assessment
+              {isHindi ? 'व्यक्तित्व मूल्यांकन शुरू करें' : 'Start Personality Assessment'}
             </Button>
           </Link>
         </div>

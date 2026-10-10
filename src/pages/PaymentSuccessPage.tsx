@@ -6,9 +6,11 @@ import { Button } from '../components/ui/Button';
 import { Badge } from '../components/ui/Badge';
 import { getProductById } from '../config/products';
 import { ROUTES } from '../config/routes';
+import { useLanguage } from '../context/LanguageContext';
 
 export const PaymentSuccessPage: React.FC = () => {
   const [searchParams] = useSearchParams();
+  const { isHindi } = useLanguage();
   const orderId = searchParams.get('orderId') || 'ORD-VERIFIED';
   const productId = searchParams.get('productId') || 'combo';
   const reportId = searchParams.get('reportId');
@@ -25,30 +27,34 @@ export const PaymentSuccessPage: React.FC = () => {
         <div className="space-y-2">
           <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-50 text-emerald-700 text-xs font-semibold">
             <ShieldCheck className="w-3.5 h-3.5" />
-            <span>Payment Verified Server-Side</span>
+            <span>{isHindi ? 'भुगतान सत्यापित (सुरक्षित)' : 'Payment Verified Server-Side'}</span>
           </div>
           <h1 className="text-2xl sm:text-3xl font-display font-extrabold text-slate-900">
-            Payment Successful
+            {isHindi ? 'भुगतान सफल रहा!' : 'Payment Successful'}
           </h1>
           <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">
-            Your premium <strong>{product?.name || 'Self-Reflection Report'}</strong> has been unlocked and added to your workspace.
+            {isHindi ? (
+              <>आपकी प्रीमियम <strong>{product?.name || 'सेल्फ-रिफ्लेक्शन रिपोर्ट'}</strong> अनलॉक हो गई है और आपके वर्कस्पेस में जोड़ दी गई है।</>
+            ) : (
+              <>Your premium <strong>{product?.name || 'Self-Reflection Report'}</strong> has been unlocked and added to your workspace.</>
+            )}
           </p>
         </div>
 
         {/* Order Details Receipt Box */}
         <div className="p-4 rounded-2xl bg-slate-50 border border-slate-100 text-left space-y-2 text-xs">
           <div className="flex justify-between text-slate-600">
-            <span>Transaction Reference:</span>
+            <span>{isHindi ? 'लेन-देन संदर्भ:' : 'Transaction Reference:'}</span>
             <span className="font-mono font-semibold text-slate-900">{orderId}</span>
           </div>
           <div className="flex justify-between text-slate-600">
-            <span>Product Entitlement:</span>
-            <span className="font-semibold text-slate-900">{product?.name || 'Premium Tier'}</span>
+            <span>{isHindi ? 'उत्पाद विवरण:' : 'Product Entitlement:'}</span>
+            <span className="font-semibold text-slate-900">{product?.name || (isHindi ? 'प्रीमियम टियर' : 'Premium Tier')}</span>
           </div>
           <div className="flex justify-between text-slate-600">
-            <span>Status:</span>
+            <span>{isHindi ? 'स्थिति:' : 'Status:'}</span>
             <Badge variant="success" size="sm">
-              Captured & Verified
+              {isHindi ? 'स्वीकृत और सत्यापित' : 'Captured & Verified'}
             </Badge>
           </div>
         </div>
@@ -62,7 +68,7 @@ export const PaymentSuccessPage: React.FC = () => {
                 className="w-full shadow-lg shadow-indigo-200"
                 rightIcon={<ArrowRight className="w-4 h-4" />}
               >
-                View My Complete Report
+                {isHindi ? 'मेरी संपूर्ण रिपोर्ट देखें' : 'View My Complete Report'}
               </Button>
             </Link>
           ) : (
@@ -73,7 +79,7 @@ export const PaymentSuccessPage: React.FC = () => {
                 className="w-full shadow-lg shadow-indigo-200"
                 rightIcon={<ArrowRight className="w-4 h-4" />}
               >
-                Go to Workspace
+                {isHindi ? 'वर्कस्पेस पर जाएं' : 'Go to Workspace'}
               </Button>
             </Link>
           )}
