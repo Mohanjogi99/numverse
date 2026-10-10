@@ -1,8 +1,9 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useParams, Link, useNavigate, useSearchParams } from 'react-router-dom';
 import {
   CheckCircle2,
   ArrowLeft,
+  ArrowRight,
   ShieldCheck,
   CreditCard,
   Loader2,
@@ -24,13 +25,22 @@ export const CheckoutPage: React.FC = () => {
   const reportId = searchParams.get('reportId') || undefined;
   const navigate = useNavigate();
   const { showToast } = useToast();
-  const { t } = useLanguage();
+  const { t, isHindi } = useLanguage();
 
   const product = getProductById(productId || 'combo') || PRODUCTS.combo;
 
   const [customerName, setCustomerName] = useState('Explorer');
   const [customerEmail, setCustomerEmail] = useState('explorer@example.com');
   const [isProcessing, setIsProcessing] = useState(false);
+  const [hasExistingAccess, setHasExistingAccess] = useState(false);
+
+  useEffect(() => {
+    paymentClientService.checkAccess(product.id, reportId).then((hasAccess) => {
+      if (hasAccess) {
+        setHasExistingAccess(true);
+      }
+    });
+  }, [product.id, reportId]);
 
   const handleProceedToPayment = async () => {
     setIsProcessing(true);
@@ -45,7 +55,8 @@ export const CheckoutPage: React.FC = () => {
         },
         onSuccess: (result) => {
           setIsProcessing(false);
-          showToast('Payment verified successfully. Premium access unlocked!', 'success');
+          setHasExistingAccess(true);
+          showToast(isHindi ? 'भुगतान सत्यापित! प्रीमियम रिपोर्ट अनलॉक हो गई।' : 'Payment verified successfully. Premium access unlocked!', 'success');
           navigate(
             `${ROUTES.PAYMENT_SUCCESS}?orderId=${result.orderId}&productId=${product.id}${
               reportId ? `&reportId=${reportId}` : ''
@@ -59,17 +70,67 @@ export const CheckoutPage: React.FC = () => {
             `${ROUTES.PAYMENT_FAILED}?productId=${product.id}&error=${encodeURIComponent(errorMsg)}`
           );
         },
-        onDismiss: () => {
+        onDismiss: async () => {
           setIsProcessing(false);
-          showToast('Checkout was closed.', 'info');
+          const hasAccess = await paymentClientService.checkAccess(product.id, reportId);
+          if (hasAccess) {
+            setHasExistingAccess(true);
+            navigate(
+              `${ROUTES.PAYMENT_SUCCESS}?orderId=paid&productId=${product.id}${
+                reportId ? `&reportId=${reportId}` : ''
+              }`
+            );
+            return;
+          }
+          showToast(isHindi ? 'चेकआउट विंडो बंद कर दी गई।' : 'Checkout was closed.', 'info');
         },
       });
     } catch (err) {
       setIsProcessing(false);
       console.error('[CheckoutPage] Checkout initiation error:', err);
-      showToast('Could not open payment gateway. Please try again.', 'error');
+      showToast(isHindi ? 'पेमेंट गेटवे शुरू नहीं हो सका।' : 'Could not open payment gateway. Please try again.', 'error');
     }
   };
+
+  if (hasExistingAccess) {
+    return (
+      <div className="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-16 space-y-8 animate-fade-in text-center">
+        <Card className="p-8 sm:p-12 space-y-6 border-emerald-200 dark:border-emerald-900/60 bg-emerald-50/40 dark:bg-emerald-950/20 shadow-xl">
+          <div className="w-16 h-16 rounded-3xl bg-emerald-100 dark:bg-emerald-900/60 text-emerald-600 dark:text-emerald-400 flex items-center justify-center mx-auto shadow-md shadow-emerald-500/10">
+            <CheckCircle2 className="w-8 h-8" />
+          </div>
+          <div className="space-y-2">
+            <Badge variant="success" size="sm">
+              {isHindi ? 'एक्सेस अनलॉक है' : 'Access Unlocked'}
+            </Badge>
+            <h2 className="text-2xl sm:text-3xl font-display font-extrabold text-slate-900 dark:text-white">
+              {isHindi ? 'आपके पास इस रिपोर्ट का एक्सेस पहले से है!' : 'You already have access to this report!'}
+            </h2>
+            <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-300 max-w-md mx-auto leading-relaxed">
+              {isHindi
+                ? 'आपका प्रीमियम लाइसेंस सक्रिय है। अपनी संपूर्ण संश्लेषित रिपोर्ट देखने के लिए नीचे दिए गए बटन पर क्लिक करें।'
+                : 'Your premium entitlement is verified and active. Click below to view your full synthesized reflection report.'}
+            </p>
+          </div>
+          <div className="pt-2 flex flex-col sm:flex-row gap-3 justify-center">
+            {reportId ? (
+              <Link to={`/report/${reportId}`}>
+                <Button size="lg" variant="primary" rightIcon={<ArrowRight className="w-5 h-5" />}>
+                  {isHindi ? 'मेरी रिपोर्ट देखें' : 'View My Report'}
+                </Button>
+              </Link>
+            ) : (
+              <Link to={ROUTES.DASHBOARD}>
+                <Button size="lg" variant="primary" rightIcon={<ArrowRight className="w-5 h-5" />}>
+                  {isHindi ? 'डैशबोर्ड पर जाएं' : 'Go to Dashboard'}
+                </Button>
+              </Link>
+            )}
+          </div>
+        </Card>
+      </div>
+    );
+  }
 
   return (
     <div className="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-16 space-y-8 animate-fade-in">

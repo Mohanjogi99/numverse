@@ -205,7 +205,17 @@ export class PaymentClientService {
         }
       },
       modal: {
-        ondismiss: () => {
+        ondismiss: async () => {
+          // Check if payment was completed right before or during modal close
+          const hasAccess = await this.checkAccess(product.id, params.reportId, userId);
+          if (hasAccess) {
+            params.onSuccess({
+              success: true,
+              verified: true,
+              orderId: 'pay_verified',
+            });
+            return;
+          }
           if (params.onDismiss) {
             params.onDismiss();
           }
@@ -214,6 +224,12 @@ export class PaymentClientService {
     };
 
     const rzp = new window.Razorpay(options);
+    if (typeof rzp.on === 'function') {
+      rzp.on('payment.failed', (response: unknown) => {
+        const errObj = response as { error?: { description?: string } };
+        params.onFailure(errObj?.error?.description || 'Payment was unsuccessful.');
+      });
+    }
     rzp.open();
   }
 
