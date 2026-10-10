@@ -303,35 +303,92 @@ export const HomePage: React.FC = () => {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-8">
-          {/* Step 1 */}
-          <Card className="p-6 sm:p-8 space-y-4 border-slate-200/90 dark:border-slate-800/80 hover:border-indigo-200 dark:hover:border-indigo-500/40 transition-all">
-            <div className="w-12 h-12 rounded-2xl bg-indigo-50 dark:bg-indigo-950 text-indigo-600 dark:text-indigo-400 flex items-center justify-center font-display font-bold text-xl">
+          {/* Step 1: Enter */}
+          <Card className="relative overflow-hidden group p-6 sm:p-8 space-y-4 border-slate-200/90 dark:border-slate-800/80 hover:border-indigo-300 dark:hover:border-indigo-500/50 hover:shadow-xl hover:shadow-indigo-500/10 transition-all duration-300">
+            {/* Watermark Illustration */}
+            <div className="absolute -right-6 -bottom-6 w-44 h-44 pointer-events-none opacity-[0.08] dark:opacity-[0.15] group-hover:opacity-[0.18] dark:group-hover:opacity-[0.28] group-hover:scale-110 transition-all duration-500 ease-out text-indigo-600 dark:text-indigo-400">
+              <svg viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-full h-full">
+                <circle cx="100" cy="100" r="90" stroke="currentColor" strokeWidth="1.5" strokeDasharray="4 4" />
+                <circle cx="100" cy="100" r="70" stroke="currentColor" strokeWidth="1" />
+                <circle cx="100" cy="100" r="45" stroke="currentColor" strokeWidth="1.5" />
+                <circle cx="100" cy="100" r="20" stroke="currentColor" strokeWidth="2" />
+                <path d="M100 10 L100 190 M10 100 L190 100 M36.36 36.36 L163.64 163.64 M36.36 163.64 L163.64 36.36" stroke="currentColor" strokeWidth="0.75" />
+                <rect x="75" y="75" width="50" height="50" rx="10" stroke="currentColor" strokeWidth="1" />
+                <text x="100" y="28" fontSize="12" fontWeight="bold" textAnchor="middle" fill="currentColor">1</text>
+                <text x="152" y="48" fontSize="12" fontWeight="bold" textAnchor="middle" fill="currentColor">2</text>
+                <text x="175" y="104" fontSize="12" fontWeight="bold" textAnchor="middle" fill="currentColor">3</text>
+                <text x="152" y="160" fontSize="12" fontWeight="bold" textAnchor="middle" fill="currentColor">4</text>
+                <text x="100" y="180" fontSize="12" fontWeight="bold" textAnchor="middle" fill="currentColor">5</text>
+                <text x="48" y="160" fontSize="12" fontWeight="bold" textAnchor="middle" fill="currentColor">6</text>
+                <text x="25" y="104" fontSize="12" fontWeight="bold" textAnchor="middle" fill="currentColor">7</text>
+                <text x="48" y="48" fontSize="12" fontWeight="bold" textAnchor="middle" fill="currentColor">8</text>
+                <text x="100" y="105" fontSize="14" fontWeight="bold" textAnchor="middle" fill="currentColor">9</text>
+              </svg>
+            </div>
+
+            <div className="relative z-10 w-12 h-12 rounded-2xl bg-indigo-50 dark:bg-indigo-950 text-indigo-600 dark:text-indigo-400 flex items-center justify-center font-display font-bold text-xl shadow-sm border border-indigo-100/60 dark:border-indigo-900/60">
               1
             </div>
-            <h4 className="text-lg font-display font-bold text-slate-900 dark:text-white">{t.home.step1Title}</h4>
-            <p className="text-sm text-slate-600 dark:text-slate-300 leading-relaxed">
+            <h4 className="relative z-10 text-lg font-display font-bold text-slate-900 dark:text-white">{t.home.step1Title}</h4>
+            <p className="relative z-10 text-sm text-slate-600 dark:text-slate-300 leading-relaxed">
               {t.home.step1Desc}
             </p>
           </Card>
 
-          {/* Step 2 */}
-          <Card className="p-6 sm:p-8 space-y-4 border-slate-200/90 dark:border-slate-800/80 hover:border-indigo-200 dark:hover:border-indigo-500/40 transition-all">
-            <div className="w-12 h-12 rounded-2xl bg-purple-50 dark:bg-purple-950 text-purple-600 dark:text-purple-400 flex items-center justify-center font-display font-bold text-xl">
+          {/* Step 2: Discover */}
+          <Card className="relative overflow-hidden group p-6 sm:p-8 space-y-4 border-slate-200/90 dark:border-slate-800/80 hover:border-purple-300 dark:hover:border-purple-500/50 hover:shadow-xl hover:shadow-purple-500/10 transition-all duration-300">
+            {/* Watermark Illustration */}
+            <div className="absolute -right-6 -bottom-6 w-44 h-44 pointer-events-none opacity-[0.08] dark:opacity-[0.15] group-hover:opacity-[0.18] dark:group-hover:opacity-[0.28] group-hover:scale-110 transition-all duration-500 ease-out text-purple-600 dark:text-purple-400">
+              <svg viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-full h-full">
+                <circle cx="100" cy="100" r="90" stroke="currentColor" strokeWidth="1" />
+                <polygon points="100,15 175,145 25,145" stroke="currentColor" strokeWidth="1.5" />
+                <polygon points="100,185 25,55 175,55" stroke="currentColor" strokeWidth="1.5" />
+                <circle cx="100" cy="100" r="55" stroke="currentColor" strokeWidth="1" strokeDasharray="3 3" />
+                <circle cx="100" cy="100" r="30" stroke="currentColor" strokeWidth="1.5" />
+                <path d="M100 45 C120 70 120 130 100 155 C80 130 80 70 100 45 Z" stroke="currentColor" strokeWidth="1" />
+                <path d="M45 100 C70 120 130 120 155 100 C130 80 70 80 45 100 Z" stroke="currentColor" strokeWidth="1" />
+                <circle cx="100" cy="100" r="10" fill="currentColor" fillOpacity="0.3" stroke="currentColor" strokeWidth="1" />
+                <circle cx="100" cy="15" r="4" fill="currentColor" />
+                <circle cx="175" cy="55" r="4" fill="currentColor" />
+                <circle cx="175" cy="145" r="4" fill="currentColor" />
+                <circle cx="100" cy="185" r="4" fill="currentColor" />
+                <circle cx="25" cy="145" r="4" fill="currentColor" />
+                <circle cx="25" cy="55" r="4" fill="currentColor" />
+              </svg>
+            </div>
+
+            <div className="relative z-10 w-12 h-12 rounded-2xl bg-purple-50 dark:bg-purple-950 text-purple-600 dark:text-purple-400 flex items-center justify-center font-display font-bold text-xl shadow-sm border border-purple-100/60 dark:border-purple-900/60">
               2
             </div>
-            <h4 className="text-lg font-display font-bold text-slate-900 dark:text-white">{t.home.step2Title}</h4>
-            <p className="text-sm text-slate-600 dark:text-slate-300 leading-relaxed">
+            <h4 className="relative z-10 text-lg font-display font-bold text-slate-900 dark:text-white">{t.home.step2Title}</h4>
+            <p className="relative z-10 text-sm text-slate-600 dark:text-slate-300 leading-relaxed">
               {t.home.step2Desc}
             </p>
           </Card>
 
-          {/* Step 3 */}
-          <Card className="p-6 sm:p-8 space-y-4 border-slate-200/90 dark:border-slate-800/80 hover:border-indigo-200 dark:hover:border-indigo-500/40 transition-all">
-            <div className="w-12 h-12 rounded-2xl bg-amber-50 dark:bg-amber-950 text-amber-600 dark:text-amber-400 flex items-center justify-center font-display font-bold text-xl">
+          {/* Step 3: Understand */}
+          <Card className="relative overflow-hidden group p-6 sm:p-8 space-y-4 border-slate-200/90 dark:border-slate-800/80 hover:border-amber-300 dark:hover:border-amber-500/50 hover:shadow-xl hover:shadow-amber-500/10 transition-all duration-300">
+            {/* Watermark Illustration */}
+            <div className="absolute -right-6 -bottom-6 w-44 h-44 pointer-events-none opacity-[0.08] dark:opacity-[0.15] group-hover:opacity-[0.18] dark:group-hover:opacity-[0.28] group-hover:scale-110 transition-all duration-500 ease-out text-amber-600 dark:text-amber-400">
+              <svg viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-full h-full">
+                <circle cx="100" cy="100" r="88" stroke="currentColor" strokeWidth="1.5" strokeDasharray="6 4" />
+                <circle cx="100" cy="100" r="72" stroke="currentColor" strokeWidth="1" />
+                <circle cx="100" cy="100" r="40" stroke="currentColor" strokeWidth="1.5" />
+                <polygon points="100,10 112,85 190,100 112,115 100,190 88,115 10,100 88,85" stroke="currentColor" strokeWidth="1.5" fill="currentColor" fillOpacity="0.08" />
+                <polygon points="100,35 108,92 165,100 108,108 100,165 92,108 35,100 92,92" stroke="currentColor" strokeWidth="0.75" />
+                <circle cx="100" cy="100" r="8" fill="currentColor" fillOpacity="0.4" stroke="currentColor" strokeWidth="1.5" />
+                <line x1="100" y1="5" x2="100" y2="15" stroke="currentColor" strokeWidth="2" />
+                <line x1="195" y1="100" x2="185" y2="100" stroke="currentColor" strokeWidth="2" />
+                <line x1="100" y1="195" x2="100" y2="185" stroke="currentColor" strokeWidth="2" />
+                <line x1="5" y1="100" x2="15" y2="100" stroke="currentColor" strokeWidth="2" />
+              </svg>
+            </div>
+
+            <div className="relative z-10 w-12 h-12 rounded-2xl bg-amber-50 dark:bg-amber-950 text-amber-600 dark:text-amber-400 flex items-center justify-center font-display font-bold text-xl shadow-sm border border-amber-100/60 dark:border-amber-900/60">
               3
             </div>
-            <h4 className="text-lg font-display font-bold text-slate-900 dark:text-white">{t.home.step3Title}</h4>
-            <p className="text-sm text-slate-600 dark:text-slate-300 leading-relaxed">
+            <h4 className="relative z-10 text-lg font-display font-bold text-slate-900 dark:text-white">{t.home.step3Title}</h4>
+            <p className="relative z-10 text-sm text-slate-600 dark:text-slate-300 leading-relaxed">
               {t.home.step3Desc}
             </p>
           </Card>
